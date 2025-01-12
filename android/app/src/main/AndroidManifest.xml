@@ -1,6 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-feature android:name="android.hardware.telephony"
+        android:required="true"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.Manifest.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
       android:name=".MainApplication"
@@ -9,7 +18,7 @@
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme"
-      android:supportsRtl="true">
+      android:supportsRtl="false">
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"

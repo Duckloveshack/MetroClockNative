@@ -1,4 +1,7 @@
 {
-  "name": "MetroDialerNative",
-  "displayName": "MetroDialerNative"
+  "name": "metro_dialer_native",
+  "displayName": "`Metro Dialer`",
+  "platforms": [
+    "android"
+  ]
 }

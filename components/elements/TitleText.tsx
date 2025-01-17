@@ -19,7 +19,7 @@ function TitleText({
 
             style={[FontStyles.title, {
                 marginBottom: 5,
-                color: Colors[theme].textPrimary,
+                color: Colors[theme].primary,
                 overflow: "hidden",
                 width: "200%"
             }]}

@@ -1,9 +1,8 @@
 export type ColorTheme = {
     background: string,
+    foreground: string,
     primary: string,
     secondary: string,
-    textPrimary: string,
-    textSecondary: string
 }
 
 type ColorPalettes = {
@@ -14,17 +13,15 @@ type ColorPalettes = {
 const Colors: ColorPalettes = {
     light: {
         background: "#ffffff",
-        primary: "#abcdef",
-        secondary: "#abcdef",
-        textPrimary: "#000000",
-        textSecondary: "#abcdef"
+        foreground: "#d0d0d0",
+        primary: "#000000",
+        secondary: "#808080",
     },
     dark: {
         background: "#000000",
-        primary: "#abcdef",
-        secondary: "#abcdef",
-        textPrimary: "#ffffff",
-        textSecondary: "#7f7f7f"
+        foreground: "#202020",
+        primary: "#ffffff",
+        secondary: "#7f7f7f",
     }
 }
 

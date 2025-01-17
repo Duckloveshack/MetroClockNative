@@ -4,24 +4,34 @@ import TestScreen from './screens/TestScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { ThemeProvider } from './context/ThemeContext';
 import { SimProvider } from './context/SimContext';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+export type RootStackParamList = {
+  Test: undefined
+}
 
 function App(): React.JSX.Element {
   const Stack = createStackNavigator();
 
   return (
     <NavigationContainer>
-      <ThemeProvider>
-        <SimProvider>
-          <Stack.Navigator
-            screenOptions={{
-              cardShadowEnabled: false,
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="Test" component={TestScreen}/>
-          </Stack.Navigator>
-        </SimProvider>
-      </ThemeProvider>
+      <SafeAreaProvider>
+        <ThemeProvider>
+          <SimProvider>
+            <GestureHandlerRootView>
+              <Stack.Navigator
+                screenOptions={{
+                  cardShadowEnabled: false,
+                  headerShown: false,
+                }}
+              >
+                <Stack.Screen name="Test" component={TestScreen}/>
+              </Stack.Navigator>
+            </GestureHandlerRootView>
+          </SimProvider>
+        </ThemeProvider>
+      </SafeAreaProvider>
     </NavigationContainer>
   );
 }

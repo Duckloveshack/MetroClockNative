@@ -20,7 +20,7 @@ function SectionTitle({
             <Text
                 numberOfLines={1}
                 style={[FontStyles.sectionTitle, {
-                    color: Colors[theme].textPrimary,
+                    color: Colors[theme].primary,
                     overflow: "hidden",
                     width: "200%"
                 }]}
@@ -31,7 +31,7 @@ function SectionTitle({
                 <Text style={{
                     fontSize: 14,
                     fontWeight: 400,
-                    color: Colors[theme].textSecondary
+                    color: Colors[theme].secondary
                 }}>
                     {subtitle}
                 </Text>

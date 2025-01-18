@@ -109,7 +109,20 @@ function TestScreen({
                     icon: "telephone",
                     string: "test test",
                 },
-            ]} options={[
+            ]}
+            options={[
+                {
+                    string: "test link",
+                },
+                {
+                    string: "test link",
+                },
+                {
+                    string: "test link",
+                },
+                {
+                    string: "test link",
+                },
                 {
                     string: "test link",
                 },
@@ -119,7 +132,8 @@ function TestScreen({
                 {
                     string: "test link",
                 }
-            ]}/>
+            ]}
+            />
         </View>
     );
 }

@@ -1,16 +1,18 @@
 import MaskedView from "@react-native-masked-view/masked-view";
 import { useEffect, useState, useRef, useLayoutEffect } from "react";
-import {NativeScrollEvent, ScrollView, View, Dimensions, useWindowDimensions } from "react-native"
+import {NativeScrollEvent, ScrollView, View, Dimensions, useWindowDimensions, StyleProp, ViewStyle } from "react-native"
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withDecay, withClamp, clamp, ReduceMotion, useAnimatedRef, measure, runOnUI, runOnJS } from "react-native-reanimated";
 
 type Attributes = {
-    children?: Array<React.ReactElement<any, any>> | React.ReactElement<any, any>
+    children?: Array<React.ReactElement<any, any>> | React.ReactElement<any, any>,
+    style?: StyleProp<ViewStyle>
 }
 
 // very much a work-in-progress :/
 function MetroScroll({
-    children
+    children,
+    style={}
 }: Attributes): React.JSX.Element {
     const translateY = useSharedValue(0);
     const currentTranslateY = useSharedValue(0);
@@ -20,7 +22,6 @@ function MetroScroll({
     const outerRef = useRef<View>(null);
 
     const windowHeight = useWindowDimensions().height;
-    //console.log(windowHeight)
 
     useEffect(() => {
       outerRef.current?.measure((xOut:number, yOut:number, outerWidth:number, outerHeight:number, outerX:number, outerY:number) => {
@@ -70,12 +71,12 @@ function MetroScroll({
     }));
   
     return (
-      <View ref={outerRef} style={{ flex: 1 }}>
+      <View ref={outerRef} style={[{ flex: 1 }, style]}>
         <GestureDetector gesture={panGesture}>
           <MaskedView
               maskElement={
                 <View style={{ width: "100%", height: dimensions.outerHeight, backgroundColor: "white" }}/>
-              }
+              }     
           >
             <Animated.View style={[translateStyle]}>
                 <View ref={innerRef}>

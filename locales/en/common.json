@@ -1,0 +1,5 @@
+{
+    "multiSimCarrier": "Call using <0>{{carrier}}</0>",
+    "name": "Dialer",
+    "noSim": "No SIM Installed"
+}

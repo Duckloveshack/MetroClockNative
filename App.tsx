@@ -6,6 +6,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { SimProvider } from './context/SimContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LocalizationProvider } from './context/LocalizationContext';
 
 export type RootStackParamList = {
   Test: undefined
@@ -19,16 +20,18 @@ function App(): React.JSX.Element {
       <SafeAreaProvider>
         <ThemeProvider>
           <SimProvider>
-            <GestureHandlerRootView>
-              <Stack.Navigator
-                screenOptions={{
-                  cardShadowEnabled: false,
-                  headerShown: false,
-                }}
-              >
-                <Stack.Screen name="Test" component={TestScreen}/>
-              </Stack.Navigator>
-            </GestureHandlerRootView>
+            <LocalizationProvider>
+              <GestureHandlerRootView>
+                <Stack.Navigator
+                  screenOptions={{
+                    cardShadowEnabled: false,
+                    headerShown: false,
+                  }}
+                >
+                  <Stack.Screen name="Test" component={TestScreen}/>
+                </Stack.Navigator>
+              </GestureHandlerRootView>
+            </LocalizationProvider>
           </SimProvider>
         </ThemeProvider>
       </SafeAreaProvider>

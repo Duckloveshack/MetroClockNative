@@ -16,9 +16,19 @@ type SimObjectProps = {
     subscriptionId: number
 }
 
-export type SimContextProps = Array<SimObjectProps>;
+export type SimContextProps = {
+  sims: Array<SimObjectProps>,
+  currentSim: number,
+  setSimIndex: (index: number) => void,
+  simColors: Array<string>
+};
 
-const SimContext = createContext<SimContextProps>([]);
+const SimContext = createContext<SimContextProps>({
+  sims: [],
+  currentSim: 0,
+  setSimIndex: (index: number) => {},
+  simColors: []
+})
 
 type Props = {
   children: React.ReactNode
@@ -27,10 +37,26 @@ type Props = {
 export const SimProvider = ({
     children
 }: Props) => {
-  const [sims, setSims] = useState<SimContextProps>([]);
+  const [sims, setSims] = useState<Array<SimObjectProps>>([]);
+  const [currentSim, setCurrentSim] = useState<number>(0);
+  const [simColors, setSimColors] = useState<Array<string>>([
+    "#cc1050",
+    "#70aa30"
+  ])
+
+  function setSimIndex(index:number):void {
+    setCurrentSim((previousIndex:number) => {
+      if (index < sims.length && index >= 0 && previousIndex !== index) {
+        return index;
+      } else {
+        return previousIndex;
+      }
+    });
+  }
 
   useEffect(() => {
     async function fetchSimData() {
+      //needs to be rewritten so it isn't annoying af-
       SimCardsManagerModule.getSimCards({
         title: 'Permission Required',
         message: 'Metro Dialer requires Phone permissions to fetch SIM data, create and manage calls, etc.',
@@ -58,7 +84,12 @@ export const SimProvider = ({
   }, []);
 
   return (
-    <SimContext.Provider value={sims}>
+    <SimContext.Provider value={{
+      sims: sims,
+      currentSim: currentSim,
+      setSimIndex: setSimIndex,
+      simColors: simColors
+    }}>
       {children}
     </SimContext.Provider>
   );

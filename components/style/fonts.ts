@@ -9,13 +9,17 @@ const FontStyles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 600
     },
+    sectionSubtitle: {
+        fontSize: 14,
+        fontWeight: 400
+    },
     info: {
         fontSize: 18,
         fontWeight: 400
     },
     link: {
         fontSize: 30,
-        fontWeight: 200
+        fontWeight: 200,
     },
     description: {
         fontSize: 12,

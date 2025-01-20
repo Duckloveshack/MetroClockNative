@@ -27,15 +27,13 @@ function SectionTitle({
             >
                 {title}
             </Text>
-            {subtitle && (
-                <Text style={{
-                    fontSize: 14,
-                    fontWeight: 400,
+            {typeof subtitle == "string"? (
+                <Text style={[{
                     color: Colors[theme].secondary
-                }}>
+                }, FontStyles.sectionSubtitle]}>
                     {subtitle}
                 </Text>
-            )}
+            ): subtitle}
         </View>
     )
 }

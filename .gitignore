@@ -55,6 +55,9 @@ yarn-error.log
 # Bundle artifact
 *.jsbundle
 
+# Crowdin
+crowdin.yml
+
 # Ruby / CocoaPods
 **/Pods/
 /vendor/bundle/

@@ -8,6 +8,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, withDel
 import FontStyles from "../style/fonts";
 import MetroScroll from "./MetroScroll";
 import { toInteger } from "lodash";
+import MetroTouchable from "./MetroTouchable";
 
 const NORMAL_BAR_HEIHGT = 60;
 const REVEALED_BAR_HEIGHT = 80;
@@ -60,14 +61,24 @@ function Link ({
         <TouchableWithoutFeedback
             onPress={onPress}
         >
-            <Animated.Text style={[{
-                color: disabled? Colors[theme].secondary: Colors[theme].primary,
+            <Animated.View style={[{
                 width: "100%",
                 paddingHorizontal: 15,
-                paddingVertical: 5
-            }, FontStyles.link, translateStyle]}>
-                {string}
-            </Animated.Text>
+                paddingVertical: 5,
+            }, translateStyle]}>
+                <MetroTouchable
+                    style={{
+                        marginEnd: "auto",
+                    }}
+                    disabled={disabled}
+                >
+                    <Text style={[{
+                        color: disabled? Colors[theme].secondary: Colors[theme].primary,
+                    }, FontStyles.link]}>
+                        {string}
+                    </Text>
+                </MetroTouchable>
+            </Animated.View>
         </TouchableWithoutFeedback>
     )
 }
@@ -217,9 +228,9 @@ function BottomBar ({
                 </View>
                 <View style={{ width: "15%" }}/>
             </View>
-            <ScrollView style={{ marginBottom: 10}}>
+            <ScrollView style={{ marginBottom: 10 }}>
                 {options.map((option, index) => (
-                    <Link index={index} expanded={expanded} string={option.string} disabled={option.disabled} onPress={option.onPress}/>
+                    <Link index={index} expanded={expanded} string={option.string} disabled={option.disabled} onPress={option.onPress} key={index}/>
                 ))}
             </ScrollView>
         </Animated.View>

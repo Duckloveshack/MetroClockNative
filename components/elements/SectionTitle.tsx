@@ -27,9 +27,10 @@ function SectionTitle({
             >
                 {title}
             </Text>
-            {typeof subtitle == "string"? (
+            {typeof subtitle !== "function"? (
                 <Text style={[{
-                    color: Colors[theme].secondary
+                    color: Colors[theme].secondary,
+                    marginBottom: -15
                 }, FontStyles.sectionSubtitle]}>
                     {subtitle}
                 </Text>

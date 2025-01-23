@@ -32,11 +32,11 @@ function RoundedButton({
         if (!disabled) {
             ref.current?.measure((x: number, y: number, width: number, height: number, screenX: number, screenY: number) => {
                 translateX.value = withTiming((windowWidth/2-screenX)/100, {
-                    duration: 50,
+                    duration: 10,
                     easing: Easing.out(Easing.circle)
                 });
                 translateY.value = withTiming((windowHeight/2-screenY)/100, {
-                    duration: 50,
+                    duration: 10,
                     easing: Easing.out(Easing.circle)
                 });
                 buttonBackground.value = Colors.accentColor;

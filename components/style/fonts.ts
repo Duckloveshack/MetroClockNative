@@ -24,6 +24,10 @@ const FontStyles = StyleSheet.create({
     description: {
         fontSize: 12,
         fontWeight: 400
+    },
+    box: {
+        fontSize: 20,
+        fontWeight: 400
     }
 });
 

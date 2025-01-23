@@ -51,22 +51,25 @@ function MetroTouchable({
 
     // should and maybe will replace it :p
     function onTouchMove(e:GestureResponderEvent) {
-        const distanceX = objectProperties.current.centerX - e.nativeEvent.pageX;
-        const distanceY = objectProperties.current.centerY - e.nativeEvent.pageY;
+        if (!disabled) {
+            const distanceX = objectProperties.current.centerX - e.nativeEvent.pageX;
+            const distanceY = objectProperties.current.centerY - e.nativeEvent.pageY;
 
-        const distanceZ = (objectProperties.current.height*objectProperties.current.width)/(objectProperties.current.height+objectProperties.current.width)
+            //const distanceZ = (objectProperties.current.height*objectProperties.current.width)/(objectProperties.current.height+objectProperties.current.width)
+            const distanceZ = Math.max(objectProperties.current.width, objectProperties.current.height)
 
-        rotateX.value = Math.max(-MAX_ROTATION, 
-            Math.min(MAX_ROTATION,
-                Math.atan2( distanceY, distanceZ) * (180 / Math.PI) * ((1 + Math.abs(distanceX / objectProperties.current.width/2)) ** 1.31)
-            )
-        );
+            rotateX.value = Math.max(-MAX_ROTATION, 
+                Math.min(MAX_ROTATION,
+                    Math.atan2( distanceY, distanceZ) * (180 / Math.PI) * ((1 + Math.abs(distanceX / objectProperties.current.width/2)) ** 1.31)
+                )
+            );
 
-        rotateY.value = Math.max(-MAX_ROTATION, 
-            Math.min(MAX_ROTATION,
-                Math.atan2( -distanceX, PERSPECTIVE) * (180 / Math.PI) * ((1 + Math.abs(distanceY / objectProperties.current.height/2)) ** 1.31)
-            )
-        );
+            rotateY.value = Math.max(-MAX_ROTATION, 
+                Math.min(MAX_ROTATION,
+                    Math.atan2( -distanceX, PERSPECTIVE) * (180 / Math.PI) * ((1 + Math.abs(distanceY / objectProperties.current.height/2)) ** 1.31)
+                )
+            );
+        }
     }
 
     function onTouchEnd(e:GestureResponderEvent) {

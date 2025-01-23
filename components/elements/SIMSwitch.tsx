@@ -25,9 +25,7 @@ function SIMSwitch(): React.JSX.Element {
     }))
 
     return(
-        <MetroTouchable style={{
-        
-        }}>
+        <MetroTouchable>
         <View style={{
             height: 30,
             width: 40*sims.length

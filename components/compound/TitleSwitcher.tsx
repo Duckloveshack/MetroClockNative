@@ -37,7 +37,7 @@ function TitleSwitcher(): React.JSX.Element {
         default: {
             return(
                 <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                    <SectionTitle title={t("common:name").toUpperCase()} subtitle={
+                    <SectionTitle title={t("common:appName").toUpperCase()} subtitle={
                         <Text style={[{
                             color: Colors[theme].secondary
                         }, FontStyles.sectionSubtitle]}>

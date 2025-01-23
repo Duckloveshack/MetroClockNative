@@ -2,20 +2,22 @@ import i18next from 'i18next';
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import common from "./locales/en/common.json"
+import common from "./locales/en/common.json";
+import settings from "./locales/en/settings.json";
 
 i18n
   .use(initReactI18next)
   .init({
     resources: {
       en: {
-        common: common
+        common: common,
+        settings: settings
       }
     },
     partialBundledLanguages: true,
     lng: 'en',
     fallbackLng: "en",
-    ns: ['common', 'translation'],
+    ns: ['common', 'settings'],
     backend: {
       loadPath: "./locales/{{lng}}/{{ns}}.json"
     }

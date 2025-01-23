@@ -6,11 +6,10 @@ import RoundedButton from "./RoundedButton";
 import { ScrollView, TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, withDelay, runOnJS } from "react-native-reanimated";
 import FontStyles from "../style/fonts";
-import MetroScroll from "./MetroScroll";
-import { toInteger } from "lodash";
+import _ from "lodash";
 import MetroTouchable from "./MetroTouchable";
 
-const NORMAL_BAR_HEIHGT = 60;
+const NORMAL_BAR_HEIGHT = 60;
 const REVEALED_BAR_HEIGHT = 80;
 const EXTENDED_BAR_HEIGHT = 360;
 
@@ -28,24 +27,22 @@ function Link ({
     onPress = () => {},
     index = 0,
     expanded = false
-}):React.JSX.Element {
+}: LinkAttributes):React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     const translateY = useSharedValue(0);
 
     useEffect(() => {
         if (!expanded) {
-            translateY.value = 100;
+            translateY.value = withDelay(Math.max((4-index), 0)*25, withTiming(100, {
+                duration: 300,
+                easing: Easing.out(Easing.circle)
+            }));
         } else {
             translateY.value = withDelay(index*25, withTiming(0, {
                 duration: 300,
                 easing: Easing.out(Easing.circle)
             }));
         } 
-
-        // translateY.value = withDelay(index*25, withTiming(expanded? 0: 100, {
-        //     duration: 350,
-        //     easing: expanded? Easing.out(Easing.circle): Easing.in(Easing.circle)
-        // }))
     }, [expanded])
 
     const translateStyle = useAnimatedStyle(() => ({
@@ -98,21 +95,28 @@ type optionProps = Array<{
 
 type Attributes = {
     controls?: controlProps
-    options?: optionProps
+    options?: optionProps,
+    oldControls?: controlProps
+    hidden?: boolean
 }
 
 function BottomBar ({
     controls = [],
     options = [],
+    oldControls = [],
+    hidden = false
 }: Attributes): React.JSX.Element {
-    const [expanded, setExpanded] = useState(false);
-    const barHeight = useSharedValue(60);
-    const descOpacity = useSharedValue(1);
+    const [expanded, setExpanded] = useState<boolean>(false);
+    const [_controls, _setControls] = useState<controlProps>([]);
+    const barHeight = useSharedValue<number>(60);
+    const descOpacity = useSharedValue<number>(1);
+    const controlTranslateY = useSharedValue<number>(0);
+    const rootTranslateY = useSharedValue<number>(0);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     function expandBar() {
-        barHeight.value = withTiming(expanded? NORMAL_BAR_HEIHGT: (options.length !== 0? EXTENDED_BAR_HEIGHT: REVEALED_BAR_HEIGHT), {
+        barHeight.value = withTiming(expanded? NORMAL_BAR_HEIGHT: (options.length !== 0? EXTENDED_BAR_HEIGHT: REVEALED_BAR_HEIGHT), {
             duration: options.length !== 0? 400: 300,
             easing: Easing.out(Easing.poly(5))
         });
@@ -124,21 +128,55 @@ function BottomBar ({
         setExpanded(!expanded);
     }
 
+    useEffect(() => {
+        controlTranslateY.value = withTiming(-NORMAL_BAR_HEIGHT, {
+            duration: 150, 
+            easing: Easing.in(Easing.circle)
+        })
+        setTimeout(() => {
+            _setControls(controls);
+            controlTranslateY.value = NORMAL_BAR_HEIGHT;
+            controlTranslateY.value = withTiming(0, {
+                duration: 200,
+                easing: Easing.in(Easing.elastic(1.2))
+            })
+        }, 150)
+    }, [controls]);
+
+    useEffect(() => {
+        rootTranslateY.value = withTiming(hidden? NORMAL_BAR_HEIGHT: 0, {
+            duration: 250,
+            easing: Easing.out(Easing.circle)
+        })
+    }, [hidden])
+
+    const controlStyle = useAnimatedStyle(() => ({
+        transform: [{
+            translateY: controlTranslateY.value
+        }],
+        opacity: (NORMAL_BAR_HEIGHT-Math.abs(controlTranslateY.value))/NORMAL_BAR_HEIGHT
+    }))
+
     const expandStyle = useAnimatedStyle(() => ({
         transform: [{
-            translateY: -barHeight.value+NORMAL_BAR_HEIHGT
+            translateY: -barHeight.value+NORMAL_BAR_HEIGHT
         }]
     }));
 
     const opacityStyle = useAnimatedStyle(() => ({
         opacity: descOpacity.value
-    }))
+    }));
+
+    const rootStyle = useAnimatedStyle(() => ({
+        transform: [{
+            translateY: rootTranslateY.value
+        }],
+        height: rootTranslateY.value == NORMAL_BAR_HEIGHT? 0: NORMAL_BAR_HEIGHT
+    }));
 
     return (
-        <View
-            style={{
-                height: NORMAL_BAR_HEIHGT
-            }}
+        <Animated.View
+            style={rootStyle}
         >
         <Animated.View
             style={[{
@@ -150,23 +188,24 @@ function BottomBar ({
             <View style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
-                height: 60
+                height: 60,
+                overflow: "hidden"
             }}>
                 <View style={{ width: "15%" }}/>
-                <View style={{
+                <Animated.View style={[{
                     justifyContent: "center",
                     alignItems: "center",
                     height: 60,
                     flexDirection: "row",
                     width: "70%",
                     gap: 30
-                }}>
-                    {controls.map((control, index) => {
+                }, controlStyle]}>
+                    {_controls.map((control, index) => {
                         return (
                             <RoundedButton size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
                         )
                     })}
-                </View>
+                </Animated.View>
                 <View style={{
                     width: "15%",
                     alignItems: "flex-end",
@@ -207,22 +246,16 @@ function BottomBar ({
                         justifyContent: "center"
                     }}
                 >
-                    {controls.map((control, index) => {
+                    {_controls.map((control, index) => {
                         return (
-                            // <TouchableWithoutFeedback
-                            //     onPress={() => {
-                            //         if (typeof control.onPress == "function" && !control.disabled) control.onPress();
-                            //     }}
-                            // >
-                                <Animated.Text style={[{
-                                    color: control.disabled? Colors[theme].secondary: Colors[theme].primary,
-                                    width: 60,
-                                    textAlign: "center",
-                                    marginTop: -3
-                                }, FontStyles.description, opacityStyle]}>
-                                    {control.string}
-                                </Animated.Text>
-                            // </TouchableWithoutFeedback>
+                            <Animated.Text style={[{
+                                color: control.disabled? Colors[theme].secondary: Colors[theme].primary,
+                                width: 60,
+                                textAlign: "center",
+                                marginTop: -3
+                            }, FontStyles.description, opacityStyle]}>
+                                {control.string}
+                            </Animated.Text>
                         )
                     })}
                 </View>
@@ -234,7 +267,7 @@ function BottomBar ({
                 ))}
             </ScrollView>
         </Animated.View>
-        </View>
+        </Animated.View>
     )
 }
 

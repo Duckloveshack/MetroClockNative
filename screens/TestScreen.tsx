@@ -1,31 +1,68 @@
-import React, { useContext } from "react";
-import { View, Text, StyleSheet, StatusBar, NativeModules, ScrollView } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { View, Text, StyleSheet, StatusBar, ScrollView } from "react-native";
 import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import Colors from "../components/style/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TitleText from "../components/elements/TitleText";
 import FontStyles from "../components/style/fonts";
-import MetroScroll from "../components/elements/MetroScroll";
 import BottomBar from "../components/elements/BottomBar";
 import TitleSwitcher from "../components/compound/TitleSwitcher";
-import MetroTouchable from "../components/elements/MetroTouchable";
 import LocalizationContext, { LocalizationContextProps } from "../context/LocalizationContext";
-import { t } from "i18next";
-import i18n from "../i18n";
-
-const { MiscBridgeModule } = NativeModules;
-
-type Attributes = {
-    route: any,
-    navigation: any
-}
+import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
+import { TestScreenProps } from "../types/screens";
 
 function TestScreen({
     route,
     navigation
-}: Attributes): React.JSX.Element {
+}: TestScreenProps): React.JSX.Element {
+    return (
+        // Only for demo purposes. Please NEVER do this for a single screen, or like, ever.
+        <BottomBarProvider>
+            <TestScreenInternal route={route} navigation={navigation}/>
+        </BottomBarProvider>
+    )
+}
+
+function TestScreenInternal({
+    route,
+    navigation
+}: TestScreenProps): React.JSX.Element {
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
+    const { setBar, controls, options, hidden } = useContext<BottomBarContextProps>(BottomBarContext);
+
+    useEffect(() => {
+        setBar({
+            controls: [
+                {
+                    icon: "telephone",
+                    string: "test"
+                },
+                {
+                    icon: "telephone",
+                    string: "test"
+                },
+                {
+                    icon: "telephone",
+                    string: "test",
+                    disabled: true
+                },
+                {
+                    icon: "telephone",
+                    string: "test test",
+                },
+            ],
+            options: [
+                {
+                    string: "settings",
+                    onPress: () => {
+                        navigation.navigate("SettingsScreen");
+                    }
+                },
+            ],
+            hidden: false
+        })
+    }, [theme])
 
     const styles = StyleSheet.create({
         container: {
@@ -47,6 +84,7 @@ function TestScreen({
     });
 
     return(
+        // <BottomBarProvider>
         <View style={styles.container}>
             <View style={styles.itemContainer}>
             <StatusBar
@@ -81,50 +119,9 @@ function TestScreen({
                 {/* <Text style={[FontStyles.info, styles.descriptionText]}>this should be <Text style={styles.accentDescriptionText}>below</Text> the scrollview</Text> */}
             </SafeAreaView>
             </View>
-            <BottomBar controls={[
-                {
-                    icon: "telephone",
-                    string: "test"
-                },
-                {
-                    icon: "telephone",
-                    string: "test"
-                },
-                {
-                    icon: "telephone",
-                    string: "test",
-                    disabled: true
-                },
-                {
-                    icon: "telephone",
-                    string: "test test",
-                },
-            ]}
-            options={[
-                {
-                    string: "English",
-                },
-                {
-                    string: "Español",
-                },
-                {
-                    string: "Русский",
-                },
-                {
-                    string: "عربي",
-                },
-                {
-                    string: "test link",
-                },
-                {
-                    string: "test link",
-                },
-                {
-                    string: "test link",
-                }
-            ]}
-            />
+            <BottomBar controls={controls} options={options} hidden={hidden}/>
         </View>
+        // </BottomBarProvider>
     );
 }
 

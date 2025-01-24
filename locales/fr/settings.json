@@ -1,0 +1,11 @@
+{
+    "settings": "paramètres",
+
+    "languageSetting": "Langue",
+    "languageName": "Français",
+
+    "themeSetting": "Thème",
+    "lightTheme": "clair",
+    "darkTheme": "sombre",
+    "systemTheme": "système"
+}

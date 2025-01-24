@@ -70,13 +70,13 @@ function SIMSwitch(): React.JSX.Element {
                             setSimIndex(index)
                         }}
                     >
-                        <Text style={{
+                        <Text style={[{
                             height: 30,
                             width: 40,
                             color: index == currentSim? Colors[theme].primary: Colors[theme].secondary,
                             textAlign: "center",
                             verticalAlign: "middle"
-                        }}>
+                        }, FontStyles.switch]}>
                             {index+1}
                         </Text>
                     </TouchableWithoutFeedback>

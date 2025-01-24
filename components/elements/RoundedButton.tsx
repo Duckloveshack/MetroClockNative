@@ -23,7 +23,7 @@ function RoundedButton({
     const ref = useRef<View>(null);
     const translateX = useSharedValue(0);
     const translateY = useSharedValue(0);
-    const buttonBackground = useSharedValue("#00000000")
+    const buttonBackground = useSharedValue("#00000000");
 
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;

@@ -1,4 +1,4 @@
-import Animated, { Easing, useAnimatedRef, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { AnimatedStyle, Easing, useAnimatedRef, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { TouchableWithoutFeedback, StyleProp, ViewStyle, GestureResponderEvent, StatusBar } from "react-native";
 import { useRef } from "react";
 
@@ -8,13 +8,17 @@ const MAX_ROTATION = 20
 type Attributes = {
     children: Array<React.ReactElement<any, any>> | React.ReactElement<any, any>,
     onPress?: () => void,
+    onPressIn?: () => void,
+    onPressOut?: () => void,
     disabled?: boolean,
-    style?: StyleProp<ViewStyle>
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
 }
 
 function MetroTouchable({
     children,
     onPress,
+    onPressIn,
+    onPressOut,
     disabled = false,
     style
 }: Attributes): React.JSX.Element {
@@ -99,6 +103,8 @@ function MetroTouchable({
     return(
         <TouchableWithoutFeedback
             onPress={() => { if (typeof onPress == "function" && !disabled) onPress(); }}
+            onPressIn={() => { if (typeof onPressIn == "function" && !disabled) onPressIn(); }}
+            onPressOut={() => { if (typeof onPressOut == "function" && !disabled) onPressOut(); }}
         >
             <Animated.View
                 style={[style, rotateStyle]}

@@ -10,6 +10,7 @@ import TitleSwitcher from "../components/compound/TitleSwitcher";
 import LocalizationContext, { LocalizationContextProps } from "../context/LocalizationContext";
 import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
 import { TestScreenProps } from "../types/screens";
+import { useTranslation } from "react-i18next";
 
 function TestScreen({
     route,
@@ -30,6 +31,7 @@ function TestScreenInternal({
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
     const { setBar, controls, options, hidden } = useContext<BottomBarContextProps>(BottomBarContext);
+    const { t } = useTranslation(["common", "settings"]);
 
     useEffect(() => {
         setBar({
@@ -54,7 +56,7 @@ function TestScreenInternal({
             ],
             options: [
                 {
-                    string: "settings",
+                    string: t("settings:settings"),
                     onPress: () => {
                         navigation.navigate("SettingsScreen");
                     }
@@ -62,7 +64,7 @@ function TestScreenInternal({
             ],
             hidden: false
         })
-    }, [theme])
+    }, [theme, locale])
 
     const styles = StyleSheet.create({
         container: {

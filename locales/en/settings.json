@@ -1,7 +1,10 @@
 {
     "settings": "settings",
 
-    "theme": "Theme",
+    "languageSetting": "Language",
+    "languageName": "English",
+
+    "themeSetting": "Theme",
     "lightTheme": "light",
     "darkTheme": "dark",
     "systemTheme": "system"

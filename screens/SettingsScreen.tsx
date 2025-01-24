@@ -4,11 +4,13 @@ import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import Colors from "../components/style/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TitleText from "../components/elements/TitleText";
-import { t } from "i18next";
 import SectionTitle from "../components/elements/SectionTitle";
 import { SettingsScreenProps } from "../types/screens";
 import SelectionBox from "../components/elements/SelectionBox";
 import FontStyles from "../components/style/fonts";
+import { useTranslation } from "react-i18next";
+import LocalizationContext from "../context/LocalizationContext";
+import Button from "../components/elements/Button";
 
 type SelectionBoxAttributes = {
     title: string,
@@ -48,6 +50,8 @@ function SettingsScreen({
     navigation
 }: SettingsScreenProps): React.JSX.Element {
     const { theme, isDark, setTheme, themeSetting } = useContext<ThemeContextProps>(ThemeContext);
+    const { t } = useTranslation(["common", "settings"]);
+    const { locale, setLocale } = useContext(LocalizationContext);
 
     const styles = StyleSheet.create({
         container: {
@@ -75,7 +79,7 @@ function SettingsScreen({
                     <TitleText text={t("settings:settings")}/>
                     <ScrollView>
                         <SettingsSelectionBox 
-                            title={t("settings:theme")}
+                            title={t("settings:themeSetting")}
                             options={[
                                 { name: t("settings:lightTheme"), value: "light" },
                                 { name: t("settings:darkTheme"), value: "dark" },
@@ -88,6 +92,20 @@ function SettingsScreen({
                                 setTheme(theme);
                             }}
                         />
+                        <SettingsSelectionBox 
+                            title={t("settings:languageSetting")}
+                            options={[
+                                { name: t("settings:languageName", { lng: "en" }), value: "en" },
+                                { name: t("settings:languageName", { lng: "fr" }), value: "fr" }
+                            ]}
+                            fetchValue={() => {
+                                return locale;
+                            }}
+                            onChange={(locale) => {
+                                setLocale(locale);
+                            }}
+                        />
+                        <Button text="test" onPress={() => { navigation.navigate("Test") }}/>
                     </ScrollView>
                 </SafeAreaView>
             </View>

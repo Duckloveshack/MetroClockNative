@@ -6,13 +6,12 @@ import SectionTitle from "../elements/SectionTitle";
 import SIMSwitch from "../elements/SIMSwitch";
 import FontStyles from "../style/fonts";
 import Colors from "../style/colors";
-import { t } from "i18next";
-import { Trans } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 function TitleSwitcher(): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     const { sims, currentSim, simColors } = useContext<SimContextProps>(SimContext);
-    const [simIndex, setSimIndex] = useState(0);
+    const { t } = useTranslation(["common"]);
 
     useEffect(() => {
 

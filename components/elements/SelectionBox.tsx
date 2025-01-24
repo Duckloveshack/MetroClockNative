@@ -31,6 +31,7 @@ function SelectionBox({
     const boxHeight = useSharedValue(NORMAL_BOX_HEIGHT);
     const optionHeight = useSharedValue(0);
     const selectedHeight = useSharedValue(NORMAL_BOX_HEIGHT-6);
+    const zIndex = useSharedValue(0);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
@@ -44,6 +45,7 @@ function SelectionBox({
 
     useEffect(() => {
         if (expanded) {
+            zIndex.value = 10;
             boxHeight.value = withTiming((NORMAL_BOX_HEIGHT+4)*options.length+14, {
                 duration: 250,
                 easing: Easing.out(Easing.circle)
@@ -69,17 +71,18 @@ function SelectionBox({
                 duration: 250,
                 easing: Easing.out(Easing.circle)
             });
+            setTimeout(() => zIndex.value = 0, 250)
         }
-    }, [expanded])
+    }, [expanded]);
 
     return(
         <MetroTouchable
-            style={{
-                height: NORMAL_BOX_HEIGHT,
-                flex: 1,
-                zIndex: expanded? 10: 0
-            }}
             disabled={expanded || disabled}
+            style={{
+                flex: 1,
+                height: NORMAL_BOX_HEIGHT,
+                zIndex: zIndex
+            }}
         >
             <Animated.View style={boxStyle}>
                 {options.map((option, index) => ((

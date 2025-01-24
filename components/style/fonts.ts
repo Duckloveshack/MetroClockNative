@@ -28,6 +28,10 @@ const FontStyles = StyleSheet.create({
     box: {
         fontSize: 20,
         fontWeight: 400
+    },
+    switch: {
+        fontSize: 14,
+        fontWeight: 400
     }
 });
 

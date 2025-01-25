@@ -2,7 +2,12 @@ import type { StackScreenProps } from "@react-navigation/stack";
 
 export type RootStackParamList = {
     Test: undefined,
-    SettingsScreen: undefined
+    SettingsScreen: undefined,
+    ModalScreen: {
+        title: string,
+        subtitle?: string,
+        components?: React.ReactNode
+    }
 }
 
 export type TestScreenProps = StackScreenProps<
@@ -13,4 +18,9 @@ export type TestScreenProps = StackScreenProps<
 export type SettingsScreenProps = StackScreenProps<
     RootStackParamList,
     "SettingsScreen"
+>
+
+export type ModalScreenProps = StackScreenProps<
+    RootStackParamList,
+    "ModalScreen"
 >

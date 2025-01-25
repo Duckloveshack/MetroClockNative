@@ -1,6 +1,7 @@
 import Animated, { AnimatedStyle, Easing, useAnimatedRef, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { TouchableWithoutFeedback, StyleProp, ViewStyle, GestureResponderEvent, StatusBar } from "react-native";
+import { StyleProp, ViewStyle, GestureResponderEvent, StatusBar } from "react-native";
 import { useRef } from "react";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const PERSPECTIVE = 200;
 const MAX_ROTATION = 20
@@ -11,7 +12,8 @@ type Attributes = {
     onPressIn?: () => void,
     onPressOut?: () => void,
     disabled?: boolean,
-    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>,
+    ignoreStatusBarHeight?: boolean
 }
 
 function MetroTouchable({
@@ -20,7 +22,8 @@ function MetroTouchable({
     onPressIn,
     onPressOut,
     disabled = false,
-    style
+    style,
+    ignoreStatusBarHeight = false
 }: Attributes): React.JSX.Element {
     const rotateX = useSharedValue(0);
     const rotateY = useSharedValue(0);
@@ -46,10 +49,12 @@ function MetroTouchable({
                     width: width,
                     height: height,
                     centerX: x + width/2,
-                    centerY: y + height/2 + (StatusBar.currentHeight || 0)
+                    centerY: y + height/2 + (ignoreStatusBarHeight? 0: StatusBar.currentHeight || 0)
                 }
                 onTouchMove(e);
-            })
+            });
+
+            if (typeof onPressIn == "function") onPressIn();
         }
     }
 
@@ -83,6 +88,8 @@ function MetroTouchable({
             duration: 200,
             easing: Easing.out(Easing.circle)
         });
+
+        if (typeof onPressOut == "function") onPressOut();
     }
 
     const rotateStyle = useAnimatedStyle(() => ({
@@ -101,23 +108,24 @@ function MetroTouchable({
     }))
 
     return(
-        <TouchableWithoutFeedback
-            onPress={() => { if (typeof onPress == "function" && !disabled) onPress(); }}
-            onPressIn={() => { if (typeof onPressIn == "function" && !disabled) onPressIn(); }}
-            onPressOut={() => { if (typeof onPressOut == "function" && !disabled) onPressOut(); }}
-        >
+
             <Animated.View
                 style={[style, rotateStyle]}
                 onTouchStart={onTouchStart}
                 onTouchMove={onTouchMove}
                 onTouchEnd={onTouchEnd}
-                onTouchCancel={onTouchEnd}
+                onTouchCancel={onTouchEnd} 
 
                 ref={ref}
             >
-                {children}
+                <TouchableWithoutFeedback
+                    onPress={() => { if (typeof onPress == "function" && !disabled) onPress(); }}
+                    //onPressIn={() => { if (typeof onPressIn == "function" && !disabled) onPressIn(); }}
+                    //onPressOut={() => { if (typeof onPressOut == "function" && !disabled) onPressOut(); }}
+                >
+                    {children}
+                </TouchableWithoutFeedback>
             </Animated.View>
-        </TouchableWithoutFeedback>
     )
 }
 

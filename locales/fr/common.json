@@ -1,5 +1,6 @@
 {
     "appName": "Numéroteur",
     "multiSimCarrier": "Appelez avec <0>{{carrier}}</0>",
-    "noSim": "Aucune carte SIM installée"
+    "noSim": "Aucune carte SIM installée",
+    "ok": "ok"
 }

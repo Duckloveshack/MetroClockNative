@@ -11,6 +11,7 @@ import LocalizationContext, { LocalizationContextProps } from "../context/Locali
 import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
 import { TestScreenProps } from "../types/screens";
 import { useTranslation } from "react-i18next";
+import Button, { ModalButton } from "../components/elements/Button";
 
 function TestScreen({
     route,
@@ -100,22 +101,30 @@ function TestScreenInternal({
                 {/* <MetroScroll> */}
                 <ScrollView>
                     <Text style={[FontStyles.info, styles.descriptionText]}>
-                        Yes that is a stylistic choice ^ {"\n\n"}
-                        This is some test text {"\n"}
-                        Testing out the possibility of having <Text style={styles.accentDescriptionText}>an accent color</Text> (let's hope it works)
+                        This is a <Text style={{ fontWeight: 600 }}>development</Text> screen {"\n"}{"\n"}
+                        If you got here, it means something probably went ~very~ wrong {"\n\n"}
+                        I'll be honest, some of the things in this file are not the most efficient methods to achieve what I want to do, but they're here just so i can test out more complex situations.
                     </Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 1</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 2</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 3</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 4</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 5</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 6</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 7</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 8</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 9</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 10</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 11</Text>
-                        <Text style={[FontStyles.title, styles.descriptionText]}>test 12</Text>
+                    <Button
+                        text="MainScreen"
+                    />
+                    <Button
+                        text="Open Test Modal"
+                        onPress={() => { navigation.navigate("ModalScreen", { title: "test", subtitle: "hai!!!" }) }}
+                    />
+                    <Button
+                        text="Open Permission Modal"
+                        onPress={() => {
+                            navigation.navigate("ModalScreen", {
+                                title: "Permission required",
+                                subtitle: "Metro Dialer needs Phone permissions in order to be able to detect SIMs, as well as start calls.",
+                                components: [
+                                    <ModalButton text="grant" onPress={() => { navigation.goBack(); }}/>,
+                                    <ModalButton text="exit the app" onPress={() => { navigation.goBack(); }}/>
+                                ]
+                            })
+                        }}
+                    />
                 </ScrollView>
                 {/* </MetroScroll> */}
                 {/* <Text style={[FontStyles.info, styles.descriptionText]}>this should be <Text style={styles.accentDescriptionText}>below</Text> the scrollview</Text> */}

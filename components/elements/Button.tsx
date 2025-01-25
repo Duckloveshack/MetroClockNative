@@ -39,9 +39,10 @@ function Button({
             style={[{
                 borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
                 borderWidth: 3,
-                paddingVertical: 6,
+                //paddingVertical: 6,
                 marginEnd: "auto",
-                backgroundColor: backgroundColor
+                backgroundColor: backgroundColor,
+                marginTop: 10
             }, style]}
             onPressIn={onPressIn}
             onPressOut={onPressOut}
@@ -50,8 +51,58 @@ function Button({
             {children || <></>}
             <Text style={[{
                 color: disabled? Colors[theme].secondary: Colors[theme].primary,
-                marginHorizontal: 10
+                marginHorizontal: 10,
+                marginVertical: 6
             }, FontStyles.box]}>
+                {text}
+            </Text>
+        </MetroTouchable>
+    )
+}
+
+export function ModalButton({
+    text = "",
+    onPress = () => {},
+    children,
+    style,
+    disabled = false
+}: Attributes): React.JSX.Element {
+    const backgroundColor = useSharedValue("#00000000");
+
+    const { theme } = useContext<ThemeContextProps>(ThemeContext);
+
+    function onPressIn(): void {
+        backgroundColor.value = Colors.accentColor
+    }
+
+    function onPressOut(): void {
+        backgroundColor.value = "#00000000";
+    }
+
+    return(
+        <MetroTouchable
+            disabled={disabled}
+            style={[{
+                borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
+                borderWidth: 3,
+                //paddingVertical: 6,
+                backgroundColor: backgroundColor,
+                marginTop: 10,
+                paddingLeft: "auto",
+                flex: 1,
+                height: "auto"
+            }, style]}
+            onPressIn={onPressIn}
+            onPressOut={onPressOut}
+            onPress={onPress}
+            ignoreStatusBarHeight={true}
+        >
+            {children || <></>}
+            <Text style={[{
+                color: disabled? Colors[theme].secondary: Colors[theme].primary,
+                marginHorizontal: "auto",
+                marginVertical: 6
+            }, FontStyles.info]}>
                 {text}
             </Text>
         </MetroTouchable>

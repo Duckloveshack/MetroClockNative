@@ -32,6 +32,10 @@ const FontStyles = StyleSheet.create({
     switch: {
         fontSize: 14,
         fontWeight: 400
+    },
+    modalTitle: {
+        fontSize: 30,
+        fontWeight: 400
     }
 });
 

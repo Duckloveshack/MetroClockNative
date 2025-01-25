@@ -11,6 +11,8 @@ import SettingsScreen from './screens/SettingsScreen';
 import { Easing } from 'react-native';
 import Colors from './components/style/colors';
 import type { RootStackParamList } from './types/screens';
+import ModalScreen from './screens/ModalScreen';
+import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
 
 function App(): React.JSX.Element {
 
@@ -129,6 +131,25 @@ function NavigatorComponent(): React.JSX.Element {
     >
       <Stack.Screen name="Test" component={TestScreen}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
+      <Stack.Screen name="ModalScreen" component={ModalScreen} options={{
+        detachPreviousScreen: false,
+        presentation: "transparentModal",
+        cardStyleInterpolator: (): StackCardInterpolatedStyle => ({}),
+        transitionSpec: {
+          open: {
+            animation: "timing",
+            config: {
+              duration: 0,
+            }
+          },
+          close: {
+            animation: "timing",
+            config: {
+              duration: 200,
+            }
+          }
+        }
+      }}/>
     </Stack.Navigator>
   )
 }

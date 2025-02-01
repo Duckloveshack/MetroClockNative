@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { createStackNavigator, StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack';
 import TestScreen from './screens/TestScreen';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigationContainerRef, createNavigationContainerRef } from '@react-navigation/native';
 import ThemeContext, { ThemeProvider } from './context/ThemeContext';
 import { SimProvider } from './context/SimContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -12,12 +12,25 @@ import { Easing } from 'react-native';
 import Colors from './components/style/colors';
 import type { RootStackParamList } from './types/screens';
 import ModalScreen from './screens/ModalScreen';
-import { opacity } from 'react-native-reanimated/lib/typescript/Colors';
+import MainScreen from './screens/MainScreen';
+import BootSplash from "react-native-bootsplash";
+import SplashScreen from './screens/_SplashScreen';
+
+export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 function App(): React.JSX.Element {
+  useEffect(() => {
+    const init = async () => {
+      // …do multiple sync or async tasks
+    };
+
+    init().finally(async () => {
+      await BootSplash.hide();
+    });
+  }, []);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <SafeAreaProvider>
         <ThemeProvider>
           <SimProvider>
@@ -129,7 +142,9 @@ function NavigatorComponent(): React.JSX.Element {
         }
       }}
     >
+      <Stack.Screen name="Splash" component={SplashScreen}/>
       <Stack.Screen name="Test" component={TestScreen}/>
+      <Stack.Screen name="MainScreen" component={MainScreen}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
       <Stack.Screen name="ModalScreen" component={ModalScreen} options={{
         detachPreviousScreen: false,

@@ -118,13 +118,13 @@ function MetroTouchable({
 
                 ref={ref}
             >
-                <TouchableWithoutFeedback
+                { onPress? (<TouchableWithoutFeedback
                     onPress={() => { if (typeof onPress == "function" && !disabled) onPress(); }}
                     //onPressIn={() => { if (typeof onPressIn == "function" && !disabled) onPressIn(); }}
                     //onPressOut={() => { if (typeof onPressOut == "function" && !disabled) onPressOut(); }}
                 >
                     {children}
-                </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback>) : children }
             </Animated.View>
     )
 }

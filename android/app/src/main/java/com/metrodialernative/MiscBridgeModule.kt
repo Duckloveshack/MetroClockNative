@@ -15,4 +15,9 @@ class MiscBridgeModule(reactContext: ReactApplicationContext) : ReactContextBase
         val hexString = Integer.toHexString(ContextCompat.getColor(reactContext, android.R.color.system_accent1_300)).substring(2)
         return "#$hexString"
     }
+
+    @ReactMethod
+    fun exitApp() {
+        currentActivity?.finishAndRemoveTask();
+    }
 }

@@ -1,6 +1,11 @@
 import React, {createContext, useState, useEffect} from 'react';
 import SimCardsManagerModule from 'react-native-sim-cards-manager';
+import { BackHandler, PermissionsAndroid, NativeModules } from 'react-native';
 import _ from 'lodash';
+import { navigationRef } from '../App';
+import { ModalButton } from '../components/elements/Button';
+
+const { MiscBridgeModule } = NativeModules;
 
 type SimObjectProps = {
     carrierName: string,
@@ -56,14 +61,7 @@ export const SimProvider = ({
 
   useEffect(() => {
     async function fetchSimData() {
-      //needs to be rewritten so it isn't annoying af-
-      SimCardsManagerModule.getSimCards({
-        title: 'Permission Required',
-        message: 'Metro Dialer requires Phone permissions to fetch SIM data, create and manage calls, etc.',
-        buttonPositive: "Got it",
-        buttonNegative: "No way!",
-        buttonNeutral: "Ask me later"
-      }).then((simArray: Array<any>) => {
+      SimCardsManagerModule.getSimCardsNative().then((simArray: Array<any>) => {
         setSims((previousSims) => {
           if (_.isEqual(previousSims, simArray)) {
             return previousSims;
@@ -76,9 +74,59 @@ export const SimProvider = ({
       }); 
     }
 
-    fetchSimData();
+    let fetchingInterval:any = undefined;
 
-    const fetchingInterval = setInterval(fetchSimData, 10000);
+    async function simPermission() {
+      const grantedState = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE);
+      const grantedNumber = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS);
+
+      if (!grantedState || !grantedNumber) {
+        navigationRef.navigate(("ModalScreen"), {
+          title: "Permission required",
+          subtitle: "Metro Dialer needs phone access in order to be able to fetch SIM data.",
+          components: [
+            <ModalButton
+              text='grant'
+              onPress={async () => {
+                const granted = await PermissionsAndroid.requestMultiple([
+                  PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
+                  PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS
+                ]);
+
+                if (granted['android.permission.READ_PHONE_NUMBERS'] == "granted" && granted['android.permission.READ_PHONE_STATE'] == "granted") {
+                  fetchSimData();
+                  fetchingInterval = setInterval(fetchSimData, 10000);
+                }
+
+                navigationRef.goBack();
+              }}
+            />,
+            // <ModalButton
+            //   text='dismiss'
+            //   onPress={() => {
+            //     navigationRef.goBack();
+            //   }}
+            // />,
+            <ModalButton
+              text='quit'
+              onPress={() => {
+                navigationRef.goBack();
+                MiscBridgeModule.exitApp();
+              }}
+            />
+          ]
+        })
+      } else {
+        fetchSimData();
+        fetchingInterval = setInterval(fetchSimData, 10000);
+      }
+    }
+
+    setTimeout(simPermission, 1500);
+
+    //fetchSimData();
+
+    //const fetchingInterval = setInterval(fetchSimData, 10000);
 
     return () => { clearInterval(fetchingInterval) };
   }, []);

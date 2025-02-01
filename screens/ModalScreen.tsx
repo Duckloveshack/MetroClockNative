@@ -31,8 +31,6 @@ function ModalScreen({
     const backgroundColor = useSharedValue<string>("#00000000");
 
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
-    const { t } = useTranslation(["common", "settings"]);
-    const { locale, setLocale } = useContext(LocalizationContext);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -41,7 +39,7 @@ function ModalScreen({
                 easing: Easing.out(Easing.circle)
             });
 
-            backgroundColor.value = withTiming(isDark? "#0000007f": "ffffff7f", {
+            backgroundColor.value = withTiming(isDark? "#0000007f": "#ffffff7f", {
                 duration: 200,
                 easing: Easing.out(Easing.circle)
             })
@@ -73,33 +71,33 @@ function ModalScreen({
             width: "100%",
             height: "100%",
             backgroundColor: backgroundColor
-        }}>
-        <Animated.View style={[{
-            width: "100%",
-            backgroundColor: Colors[theme].foreground,
-            padding: 15,
-            paddingTop: StatusBar.currentHeight,
-        }, rotateStyle]}>
-            <Text style={[{
-                color: Colors[theme].primary,
-                marginBottom: 20,
-                marginTop: 10
-            }, FontStyles.modalTitle]}>
-                {route.params.title}
-            </Text>
-            {route.params.subtitle? <Text style={[{
-                color: Colors[theme].primary,
-                marginBottom: 20
-            }, FontStyles.info]}>
-                {route.params.subtitle}
-            </Text> : <></>}
-            <View style={{
-                gap: 10,
-                flexDirection: "row"
             }}>
-                {route.params.components || <DefaultOKButton navigation={navigation}/>}
-            </View>
-        </Animated.View>
+            <Animated.View style={[{
+                width: "100%",
+                backgroundColor: Colors[theme].foreground,
+                padding: 15,
+                paddingTop: StatusBar.currentHeight,
+            }, rotateStyle]}>
+                <Text style={[{
+                    color: Colors[theme].primary,
+                    marginBottom: 20,
+                    marginTop: 10
+                }, FontStyles.modalTitle]}>
+                    {route.params.title}
+                </Text>
+                {route.params.subtitle? <Text style={[{
+                    color: Colors[theme].primary,
+                    marginBottom: 20
+                }, FontStyles.info]}>
+                    {route.params.subtitle}
+                </Text> : <></>}
+                <View style={{
+                    gap: 10,
+                    flexDirection: "row"
+                }}>
+                    {route.params.components || <DefaultOKButton navigation={navigation}/>}
+                </View>
+            </Animated.View>
         </Animated.View>
     );
 }

@@ -111,7 +111,7 @@ function BottomBar ({
     const barHeight = useSharedValue<number>(60);
     const descOpacity = useSharedValue<number>(1);
     const controlTranslateY = useSharedValue<number>(0);
-    const rootTranslateY = useSharedValue<number>(0);
+    const rootTranslateY = useSharedValue<number>(NORMAL_BAR_HEIGHT);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
@@ -132,7 +132,7 @@ function BottomBar ({
         controlTranslateY.value = withTiming(-NORMAL_BAR_HEIGHT, {
             duration: 150, 
             easing: Easing.in(Easing.circle)
-        })
+        });
         setTimeout(() => {
             _setControls(controls);
             controlTranslateY.value = NORMAL_BAR_HEIGHT;
@@ -140,14 +140,14 @@ function BottomBar ({
                 duration: 200,
                 easing: Easing.in(Easing.elastic(1.2))
             })
-        }, 150)
+        }, 150);
     }, [controls]);
 
     useEffect(() => {
         rootTranslateY.value = withTiming(hidden? NORMAL_BAR_HEIGHT: 0, {
             duration: 250,
             easing: Easing.out(Easing.circle)
-        })
+        });
     }, [hidden])
 
     const controlStyle = useAnimatedStyle(() => ({

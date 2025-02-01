@@ -107,23 +107,11 @@ function TestScreenInternal({
                     </Text>
                     <Button
                         text="MainScreen"
+                        onPress={() => { navigation.navigate("MainScreen") }}
                     />
                     <Button
                         text="Open Test Modal"
                         onPress={() => { navigation.navigate("ModalScreen", { title: "test", subtitle: "hai!!!" }) }}
-                    />
-                    <Button
-                        text="Open Permission Modal"
-                        onPress={() => {
-                            navigation.navigate("ModalScreen", {
-                                title: "Permission required",
-                                subtitle: "Metro Dialer needs Phone permissions in order to be able to detect SIMs, as well as start calls.",
-                                components: [
-                                    <ModalButton text="grant" onPress={() => { navigation.goBack(); }}/>,
-                                    <ModalButton text="exit the app" onPress={() => { navigation.goBack(); }}/>
-                                ]
-                            })
-                        }}
                     />
                 </ScrollView>
                 {/* </MetroScroll> */}

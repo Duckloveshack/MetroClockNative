@@ -34,7 +34,7 @@ const FontStyles = StyleSheet.create({
         fontWeight: 400
     },
     modalTitle: {
-        fontSize: 30,
+        fontSize: 26,
         fontWeight: 400
     }
 });

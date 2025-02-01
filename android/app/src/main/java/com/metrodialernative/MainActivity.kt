@@ -1,6 +1,7 @@
 package io.github.duckloveshack.metro_dialer_native
 
 import android.os.Bundle;
+import com.zoontek.rnbootsplash.RNBootSplash;
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
@@ -23,6 +24,7 @@ class MainActivity : ReactActivity() {
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 
   override fun onCreate(savedInstanceState: Bundle?) {
+    RNBootSplash.init(this, R.style.BootTheme)
     super.onCreate(null)
   }
 }

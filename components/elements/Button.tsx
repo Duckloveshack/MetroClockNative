@@ -95,7 +95,7 @@ export function ModalButton({
             onPressIn={onPressIn}
             onPressOut={onPressOut}
             onPress={onPress}
-            ignoreStatusBarHeight={true}
+            ignoreStatusBarHeight={false}
         >
             {children || <></>}
             <Text style={[{

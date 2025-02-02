@@ -35,7 +35,7 @@ function SIMSwitch(): React.JSX.Element {
                 position: "absolute"
             }}>
                 {sims.map((sim, index) => (
-                    <View style={{
+                    <View key={index} style={{
                         height: 30,
                         width: 40,
                         borderWidth: 3,
@@ -69,6 +69,7 @@ function SIMSwitch(): React.JSX.Element {
                         onPress={() => {
                             setSimIndex(index)
                         }}
+                        key={index}
                     >
                         <Text style={[{
                             height: 30,

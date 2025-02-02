@@ -15,6 +15,7 @@ import ModalScreen from './screens/ModalScreen';
 import MainScreen from './screens/MainScreen';
 import BootSplash from "react-native-bootsplash";
 import SplashScreen from './screens/_SplashScreen';
+import DialScreen from './screens/DialScreen';
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
@@ -145,6 +146,34 @@ function NavigatorComponent(): React.JSX.Element {
       <Stack.Screen name="Splash" component={SplashScreen}/>
       <Stack.Screen name="Test" component={TestScreen}/>
       <Stack.Screen name="MainScreen" component={MainScreen}/>
+      <Stack.Screen name="DialScreen" component={DialScreen} options={{
+        cardStyleInterpolator: ({current, layouts}): StackCardInterpolatedStyle => ({
+          cardStyle: {
+            transform: [{
+              translateY: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [layouts.screen.height, 0]
+              })
+            }]
+          }
+        }),
+        transitionSpec: {
+          open: {
+            animation: "timing",
+            config: {
+              duration: 500,
+              easing: Easing.out(Easing.poly(3))
+            }
+          },
+          close: {
+            animation: "timing",
+            config: {
+              duration: 500,
+              easing: Easing.out(Easing.poly(3))
+            }
+          }
+        }
+      }}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
       <Stack.Screen name="ModalScreen" component={ModalScreen} options={{
         detachPreviousScreen: false,

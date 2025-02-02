@@ -140,6 +140,7 @@ function MetroTabs({
                         count: (index - currentIndex) % screens.length
                     })
                 }}
+                key={index}
             >
                 <View
                     style={{ alignSelf: "flex-start", paddingLeft: DISTANCE_BETWEEN_TITLES }}

@@ -51,7 +51,7 @@ function HistoryScreen({
             backgroundColor: Colors[theme].background,
             height: "100%",
             width: "100%",
-            padding: 15
+            // padding: 15
         }}>
             <ScrollView>
             {callList?.map((call, index) => {
@@ -89,8 +89,9 @@ function HistoryScreen({
                 }).toLowerCase().replaceAll(" ", "").slice(0, -1);
 
                 return (
-                    <View style={{
-                        paddingVertical: 5
+                    <View key={index} style={{
+                        paddingVertical: 5,
+                        paddingHorizontal: 15
                     }}>
                         <View style={{
                             flexDirection: "row",

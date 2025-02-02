@@ -96,6 +96,7 @@ function SelectionBox({
                                 }
                             }
                         }}
+                        key={index}
                     > 
                         <MetroTouchable style={{ marginEnd: "auto", marginStart: 10 }} disabled={!expanded || disabled}>
                             <Animated.Text

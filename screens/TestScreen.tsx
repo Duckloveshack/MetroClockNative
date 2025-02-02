@@ -38,8 +38,9 @@ function TestScreenInternal({
         setBar({
             controls: [
                 {
-                    icon: "telephone",
-                    string: "test"
+                    icon: "thumbnails",
+                    string: "dial",
+                    onPress: () => { navigation.navigate("DialScreen") }
                 },
                 {
                     icon: "telephone",

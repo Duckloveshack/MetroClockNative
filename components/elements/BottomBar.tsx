@@ -57,6 +57,7 @@ function Link ({
     return (
         <TouchableWithoutFeedback
             onPress={onPress}
+            key={index}
         >
             <Animated.View style={[{
                 width: "100%",
@@ -200,7 +201,7 @@ function BottomBar ({
                 }, controlStyle]}>
                     {_controls.map((control, index) => {
                         return (
-                            <RoundedButton size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
+                            <RoundedButton key={index} size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
                         )
                     })}
                 </Animated.View>
@@ -246,7 +247,7 @@ function BottomBar ({
                 >
                     {_controls.map((control, index) => {
                         return (
-                            <Animated.Text style={[{
+                            <Animated.Text key={index} style={[{
                                 color: control.disabled? Colors[theme].secondary: Colors[theme].primary,
                                 width: 60,
                                 textAlign: "center",

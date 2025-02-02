@@ -68,7 +68,7 @@ class CallModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
     }
 
     @ReactMethod
-    fun fetchCallLogs(count: Int?, promise: Promise) {
+    fun fetchCallLogs(count: Int? = 20, promise: Promise) {
         try {
             val result = getCallsLocal(count ?: 20);
             promise.resolve(result)

@@ -21,7 +21,7 @@ function DialScreen({
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
 
-    console.log(DTMFPlaybackModule.playDTMFTone)
+    DTMFPlaybackModule.playDTMFTone(DTMFPlaybackModule.TONE_DTMF_0)
 
     return(
         <View style={{

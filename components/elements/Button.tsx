@@ -42,7 +42,7 @@ function Button({
                 //paddingVertical: 6,
                 marginEnd: "auto",
                 backgroundColor: backgroundColor,
-                marginTop: 10
+                marginVertical: 10
             }, style]}
             onPressIn={onPressIn}
             onPressOut={onPressOut}

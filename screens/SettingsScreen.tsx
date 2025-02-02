@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, Text, StyleSheet, StatusBar, ScrollView } from "react-native";
+import { View, Text, StyleSheet, StatusBar, ScrollView, Platform } from "react-native";
 import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import Colors from "../components/style/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,6 +11,8 @@ import FontStyles from "../components/style/fonts";
 import { useTranslation } from "react-i18next";
 import LocalizationContext from "../context/LocalizationContext";
 import Button from "../components/elements/Button";
+
+import appPackage from "../package.json"
 
 type SelectionBoxAttributes = {
     title: string,
@@ -32,7 +34,7 @@ function SettingsSelectionBox({
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     return (
         <View style={{
-            marginBottom: 10
+            marginVertical: 5
         }}>
             <Text style={[{
                 color: Colors[theme].secondary,
@@ -106,6 +108,12 @@ function SettingsScreen({
                             }}
                         />
                         <Button text="test" onPress={() => { navigation.navigate("Test") }}/>
+
+                        <Text style={[{ color: Colors[theme].secondary }, FontStyles.info]}>
+                            Dialer Version: {appPackage.version} {"\n"}
+                            Android API Level: {Platform.Version} {"\n"}
+                            React Native Version: {Platform.constants.reactNativeVersion.major}.{Platform.constants.reactNativeVersion.minor}.{Platform.constants.reactNativeVersion.patch} {"\n"}
+                        </Text>
                     </ScrollView>
                 </SafeAreaView>
             </View>

@@ -32,7 +32,7 @@ class DTMFPlaybackModule(reactContext: ReactApplicationContext) : ReactContextBa
     }
 
     @ReactMethod
-    fun playDTMFTone(digit: Int, duration: Int?) {
+    fun playDTMFTone(digit: Int, duration: Int? = 250) {
         startToneLocal(digit, duration ?: 250);
     }
 }

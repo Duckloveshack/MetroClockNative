@@ -36,6 +36,10 @@ const FontStyles = StyleSheet.create({
     modalTitle: {
         fontSize: 26,
         fontWeight: 400
+    },
+    objectTitle: {
+        fontSize: 30,
+        fontWeight: 300
     }
 });
 

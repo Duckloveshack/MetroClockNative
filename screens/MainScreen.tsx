@@ -57,7 +57,7 @@ function MainScreen({
                             navigation={navigation}
                             screens={[
                                 { title: "history", component: HistoryScreen },
-                                { title: "speed dial", component: HistoryScreen }
+                                { title: "speed dial", component: HistoryScreen },
                             ]}
                         />
                     </SafeAreaView>

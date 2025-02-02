@@ -12,7 +12,8 @@ import { FlatList } from "react-native-gesture-handler"
 const DISTANCE_BETWEEN_TITLES = 15;
 
 export type ScreenletAttributes = {
-    index: number,
+    index?: number,
+    currentIndex?: SharedValue<number>,
     route: RouteProp<RootStackParamList>,
     navigation: NavigationProp<RootStackParamList>
 }
@@ -77,15 +78,16 @@ function MetroTabs({
         width: 100,
         height: 100
     });
-    const titleRef = useRef<ScrollView>(null);
     const carouselRef = useRef<ICarouselInstance>(null);
 
     const offsetArray = useSharedValue<Array<number>>([]);
+
     const offsetIndex = useSharedValue<number>(0);
+    const currentScreen = useSharedValue<number>(0);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
-    const screensTripled = [...screens, ...screens, ...screens, ...screens, ...screens]
+    const screensTripled = [...screens, ...screens, ...screens, ...screens]
 
     //Reanimated oh my gosh please stfu-
     configureReanimatedLogger({
@@ -95,7 +97,11 @@ function MetroTabs({
 
     function renderItem ({ item, index }: {item: screenType, index: number}) {
         return (
-            <item.component index={index} navigation={navigation} route={route}/>
+            <View style={{
+                paddingEnd: "50%",
+            }}>
+                <item.component index={index} currentIndex={currentScreen} navigation={navigation} route={route}/>
+            </View>
         )
     }
 
@@ -154,27 +160,30 @@ function MetroTabs({
 
     function onProgressChange (offsetProgress: number, absoluteProgress:number) {
         offsetIndex.value = absoluteProgress;
-
-        titleRef.current?.scrollTo({
-            animated: false,
-            x: interpolate(absoluteProgress % 1,
-                [0, 1],
-                [offsetArray.value[screens.length*2 + Math.floor(absoluteProgress)], offsetArray.value[screens.length*2 + Math.ceil(absoluteProgress)]]
-            )
-        })
+        if (currentScreen.value !== Math.round(absoluteProgress)) currentScreen.value = Math.round(absoluteProgress);
     }
+
+    const titleStyle = useAnimatedStyle(() => ({
+        transform: [
+            {
+                translateX: interpolate(offsetIndex.value % 1,
+                    [0, 1],
+                    [-offsetArray.value[screens.length + Math.floor(offsetIndex.value)], -offsetArray.value[screens.length + Math.ceil(offsetIndex.value)]]
+                )
+            }
+        ]
+    }))
 
     return (
         <View style={{ flex: 1 }}>
             <View style={{ height: 80 }}>
-                <ScrollView
-                    horizontal
-                    scrollEnabled={false}
-                    ref={titleRef}
-                    showsHorizontalScrollIndicator={false}
+                <Animated.View
+                    style={[{
+                        flexDirection: "row",
+                    }, titleStyle]}
                 >
                     {screensTripled.map((screen, index) => (renderTitleItem({ item: screen, index: index })))}
-                </ScrollView>
+                </Animated.View>
             </View>
             <View style={{
                 flex: 1,
@@ -187,6 +196,9 @@ function MetroTabs({
                     data={screens}
                     renderItem={renderItem}
                     onProgressChange={onProgressChange}
+                    panGestureHandlerProps={{
+                        activeOffsetX: [-20, 20]
+                    }}
 
                     ref={carouselRef}
 

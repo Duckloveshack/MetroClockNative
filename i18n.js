@@ -4,7 +4,6 @@ import { initReactI18next } from 'react-i18next';
 
 import common from "./locales/en/common.json";
 import settings from "./locales/en/settings.json";
-import resourcesToBackend from 'i18next-resources-to-backend';
 
 import fr_common from "./locales/fr/common.json";
 import fr_settings from "./locales/fr/settings.json";

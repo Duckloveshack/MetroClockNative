@@ -96,14 +96,12 @@ type optionProps = Array<{
 type Attributes = {
     controls?: controlProps
     options?: optionProps,
-    oldControls?: controlProps
     hidden?: boolean
 }
 
 function BottomBar ({
     controls = [],
     options = [],
-    oldControls = [],
     hidden = false
 }: Attributes): React.JSX.Element {
     const [expanded, setExpanded] = useState<boolean>(false);

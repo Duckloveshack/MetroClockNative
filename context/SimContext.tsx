@@ -79,8 +79,9 @@ export const SimProvider = ({
     async function simPermission() {
       const grantedState = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE);
       const grantedNumber = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS);
+      const grantedLog = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.READ_CALL_LOG);
 
-      if (!grantedState || !grantedNumber) {
+      if (!grantedState || !grantedNumber || !grantedLog) {
         navigationRef.navigate(("ModalScreen"), {
           title: "Permission required",
           subtitle: "Metro Dialer needs phone access in order to be able to fetch SIM data.",
@@ -90,7 +91,8 @@ export const SimProvider = ({
               onPress={async () => {
                 const granted = await PermissionsAndroid.requestMultiple([
                   PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
-                  PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS
+                  PermissionsAndroid.PERMISSIONS.READ_PHONE_NUMBERS,
+                  PermissionsAndroid.PERMISSIONS.READ_CALL_LOG
                 ]);
 
                 if (granted['android.permission.READ_PHONE_NUMBERS'] == "granted" && granted['android.permission.READ_PHONE_STATE'] == "granted") {
@@ -123,10 +125,6 @@ export const SimProvider = ({
     }
 
     setTimeout(simPermission, 1500);
-
-    //fetchSimData();
-
-    //const fetchingInterval = setInterval(fetchSimData, 10000);
 
     return () => { clearInterval(fetchingInterval) };
   }, []);

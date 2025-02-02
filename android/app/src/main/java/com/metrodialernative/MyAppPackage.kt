@@ -14,5 +14,9 @@ class MyAppPackage : ReactPackage {
 
     override fun createNativeModules(
         reactContext: ReactApplicationContext
-    ): MutableList<NativeModule> = listOf(DTMFPlaybackModule(reactContext), MiscBridgeModule(reactContext)).toMutableList()
+    ): MutableList<NativeModule> = listOf(
+        DTMFPlaybackModule(reactContext),
+        MiscBridgeModule(reactContext),
+        CallModule(reactContext)
+    ).toMutableList()
 }

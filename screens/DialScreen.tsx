@@ -11,8 +11,9 @@ import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../c
 import { DialScreenProps, MainScreenProps } from "../types/screens";
 import MetroTabs from "../components/elements/MetroTabs";
 import HistoryScreen from "./screenlets/HistoryScreen";
+import NativeDTMF from "../specs/NativeDTMF";
 
-const { DTMFPlaybackModule } = NativeModules;
+//const { DTMFPlaybackModule } = NativeModules;
 
 function DialScreen({
     route,
@@ -21,7 +22,9 @@ function DialScreen({
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
 
-    DTMFPlaybackModule.playDTMFTone(DTMFPlaybackModule.TONE_DTMF_0)
+    //DTMFPlaybackModule.playDTMFTone(DTMFPlaybackModule.TONE_DTMF_0)
+
+    NativeDTMF.playDTMFTone(NativeDTMF.getConstants().TONE_DTMF_STAR, 200);
 
     return(
         <View style={{

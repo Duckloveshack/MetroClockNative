@@ -4,8 +4,7 @@ import { BackHandler, PermissionsAndroid, NativeModules } from 'react-native';
 import _ from 'lodash';
 import { navigationRef } from '../App';
 import { ModalButton } from '../components/elements/Button';
-
-const { MiscBridgeModule } = NativeModules;
+import NativeMisc from '../specs/NativeMisc';
 
 type SimObjectProps = {
     carrierName: string,
@@ -113,7 +112,7 @@ export const SimProvider = ({
               text='quit'
               onPress={() => {
                 navigationRef.goBack();
-                MiscBridgeModule.exitApp();
+                NativeMisc.exitApp();
               }}
             />
           ]

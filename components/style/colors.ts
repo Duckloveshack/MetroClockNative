@@ -1,6 +1,5 @@
 import { NativeModules } from "react-native";
-
-const { MiscBridgeModule } = NativeModules
+import NativeMisc from "../../specs/NativeMisc";
 
 export type ColorTheme = {
     background: string,
@@ -28,7 +27,7 @@ const Colors: ColorPalettes = {
         primary: "#ffffff",
         secondary: "#7f7f7f",
     },
-    accentColor: MiscBridgeModule.getAccentColor()
+    accentColor: NativeMisc.getAccentColor()
 }
 
 export default Colors;

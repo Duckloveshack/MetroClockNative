@@ -9,11 +9,11 @@
     "test": "jest"
   },
   "codegenConfig": {
-    "name": "DialerModules",
+    "name": "MetroModules",
     "type": "modules",
     "jsSrcsDir": "specs",
     "android": {
-      "javaPackageName": "io.github.duckloveshack.dialermodules"
+      "javaPackageName": "com.metromodules"
     }
   },
   "dependencies": {

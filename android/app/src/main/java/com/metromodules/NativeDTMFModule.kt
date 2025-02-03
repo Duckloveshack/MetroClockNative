@@ -1,15 +1,11 @@
-package com.metrodialernative
+package com.metromodules
 
-import android.media.AudioManager
 import android.media.ToneGenerator
+import android.media.AudioManager
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
 
-class DTMFPlaybackModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    override fun getName() = "DTMFPlaybackModule";
-
-    override fun getConstants(): MutableMap<String, Any>? {
+class NativeDTMFModule(reactContext: ReactApplicationContext) : NativeDTMFSpec(reactContext) {
+    override fun getTypedExportedConstants(): MutableMap<String, Any> {
         return mutableMapOf(
             "TONE_DTMF_0" to ToneGenerator.TONE_DTMF_0,
             "TONE_DTMF_1" to ToneGenerator.TONE_DTMF_1,
@@ -22,17 +18,22 @@ class DTMFPlaybackModule(reactContext: ReactApplicationContext) : ReactContextBa
             "TONE_DTMF_8" to ToneGenerator.TONE_DTMF_8,
             "TONE_DTMF_9" to ToneGenerator.TONE_DTMF_9,
             "TONE_DTMF_STAR" to ToneGenerator.TONE_DTMF_S,
-            "TONE_DTMF_POUND" to ToneGenerator.TONE_DTMF_P,
+            "TONE_DTMF_POUND" to ToneGenerator.TONE_DTMF_P
         )
     }
 
-    private fun startToneLocal(digit: Int, duration: Int) {
+    override fun getName() = NAME
+
+    private fun _startToneLocal(digit: Int, duration: Int) {
         val toneGenerator = ToneGenerator(AudioManager.STREAM_DTMF, 100);
         toneGenerator.startTone(digit, duration);
     }
 
-    @ReactMethod
-    fun playDTMFTone(digit: Int, duration: Int? = 250) {
-        startToneLocal(digit, duration ?: 250);
+    override fun playDTMFTone(digit: Double, duration: Double) {
+        _startToneLocal(digit.toInt(), duration.toInt())
+    }
+
+    companion object {
+        const val NAME = "NativeDTMF"
     }
 }

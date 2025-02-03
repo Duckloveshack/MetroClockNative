@@ -16,6 +16,7 @@ import TestScreen from "../TestScreen";
 import Icon from "@react-native-vector-icons/foundation";
 import RoundedButton from "../../components/elements/RoundedButton";
 import { AsYouType, CountryCode } from "libphonenumber-js";
+import NativeCallContact from "../../specs/NativeCallContact";
 
 function HistoryScreen({
     index,
@@ -37,7 +38,7 @@ function HistoryScreen({
     }>>();
 
     useEffect(() => {
-        NativeModules.CallModule.fetchCallLogs(20)
+        NativeCallContact.fetchCallLogs(20)
             .then((result) => {
                 setCallList(result)
             })
@@ -61,13 +62,13 @@ function HistoryScreen({
                 // </View>
                 const type = (() => {
                     switch (call.type) {
-                        case NativeModules.CallModule.CALL_TYPE_INCOMING: {
+                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
                             return "Incoming"
                         }
-                        case NativeModules.CallModule.CALL_TYPE_OUTGOING: {
+                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
                             return "Outgoing"
                         }
-                        case NativeModules.CallModule.CALL_TYPE_MISSED: {
+                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
                             return "Missed"
                         }
                         default: {

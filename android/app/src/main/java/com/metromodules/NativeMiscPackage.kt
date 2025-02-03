@@ -6,19 +6,19 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.module.model.ReactModuleInfo
 import com.facebook.react.module.model.ReactModuleInfoProvider
 
-class NativeDTMFPackage : BaseReactPackage() {
+class NativeMiscPackage : BaseReactPackage() {
   override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? =
-    if (name == NativeDTMFModule.NAME) {
-      NativeDTMFModule(reactContext)
+    if (name == NativeMiscModule.NAME) {
+      NativeMiscModule(reactContext)
     } else {
       null
     }
 
   override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
     mapOf(
-      NativeDTMFModule.NAME to ReactModuleInfo(
-        name = NativeDTMFModule.NAME,
-        className = NativeDTMFModule.NAME,
+      NativeMiscModule.NAME to ReactModuleInfo(
+        name = NativeMiscModule.NAME,
+        className = NativeMiscModule.NAME,
         canOverrideExistingModule = false,
         needsEagerInit = false,
         isCxxModule = false,

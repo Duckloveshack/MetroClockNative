@@ -1,19 +1,17 @@
-package com.metrodialernative
+package com.metromodules
 
 import android.content.ContentResolver
 import android.os.Bundle
 import android.provider.CallLog.Calls
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.bridge.ReactContextBaseJavaModule
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableArray
+import com.facebook.react.bridge.ReactApplicationContext
 
-class CallModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext) {
-    override fun getName() = "CallModule";
-
-    override fun getConstants(): MutableMap<String, Any>? {
+class NativeCallContactModule(reactContext: ReactApplicationContext) : NativeCallContactSpec(reactContext) {
+    override fun getTypedExportedConstants(): MutableMap<String, Any> {
         return mutableMapOf(
             "CALL_TYPE_INCOMING" to Calls.INCOMING_TYPE,
             "CALL_TYPE_OUTGOING" to Calls.OUTGOING_TYPE,
@@ -24,6 +22,8 @@ class CallModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
             "CALL_TYPE_ANSWERED_EXTERNALLY" to Calls.ANSWERED_EXTERNALLY_TYPE
         )
     }
+
+    override fun getName() = NAME
 
     private fun getCallsLocal(count: Int): WritableArray {
         var bundle = Bundle();
@@ -67,13 +67,16 @@ class CallModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaMo
         return callsNative;
     }
 
-    @ReactMethod
-    fun fetchCallLogs(count: Int? = 20, promise: Promise) {
+    override fun fetchCallLogs(count: Double, promise: Promise) {
         try {
-            val result = getCallsLocal(count ?: 20);
+            val result = getCallsLocal(count.toInt());
             promise.resolve(result)
         } catch (err: Exception) {
             promise.reject("CALL_LOG_ERROR", "Failed to fetch call logs", err);
         }
+    }
+
+    companion object {
+        const val NAME = "NativeCallContact"
     }
 }

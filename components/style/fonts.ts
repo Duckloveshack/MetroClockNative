@@ -40,6 +40,14 @@ const FontStyles = StyleSheet.create({
     objectTitle: {
         fontSize: 30,
         fontWeight: 300
+    },
+    dialButton: {
+        fontSize: 36,
+        fontWeight: 300
+    },
+    dialButtonStar: {
+        fontSize: 56,
+        fontWeight: 200
     }
 });
 

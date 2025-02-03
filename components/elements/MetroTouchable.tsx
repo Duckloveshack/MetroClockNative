@@ -9,21 +9,25 @@ const MAX_ROTATION = 20
 type Attributes = {
     children: Array<React.ReactElement<any, any>> | React.ReactElement<any, any>,
     onPress?: () => void,
+    onLongPress?: () => void,
     onPressIn?: () => void,
     onPressOut?: () => void,
     disabled?: boolean,
     style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>,
-    ignoreStatusBarHeight?: boolean
+    ignoreStatusBarHeight?: boolean,
+    touchSoundDisabled?: boolean
 }
 
 function MetroTouchable({
     children,
     onPress,
+    onLongPress,
     onPressIn,
     onPressOut,
     disabled = false,
     style,
-    ignoreStatusBarHeight = false
+    ignoreStatusBarHeight = false,
+    touchSoundDisabled = false
 }: Attributes): React.JSX.Element {
     const rotateX = useSharedValue(0);
     const rotateY = useSharedValue(0);
@@ -56,6 +60,8 @@ function MetroTouchable({
 
             if (typeof onPressIn == "function") onPressIn();
         }
+
+        console.log(typeof onPress)
     }
 
     // should and maybe will replace it :p
@@ -118,10 +124,10 @@ function MetroTouchable({
 
                 ref={ref}
             >
-                { onPress? (<TouchableWithoutFeedback
+                {typeof onPress === "function" || typeof onLongPress === "function"? (<TouchableWithoutFeedback
+                    touchSoundDisabled={touchSoundDisabled}
                     onPress={() => { if (typeof onPress == "function" && !disabled) onPress(); }}
-                    //onPressIn={() => { if (typeof onPressIn == "function" && !disabled) onPressIn(); }}
-                    //onPressOut={() => { if (typeof onPressOut == "function" && !disabled) onPressOut(); }}
+                    onLongPress={() => { if (typeof onLongPress == "function" && !disabled) onLongPress(); }}
                 >
                     {children}
                 </TouchableWithoutFeedback>) : children }

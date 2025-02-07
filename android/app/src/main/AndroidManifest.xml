@@ -29,9 +29,22 @@
       android:exported="true"
       android:theme="@style/BootTheme">
       <intent-filter>
-        <action android:name="android.intent.action.MAIN" />
-        <category android:name="android.intent.category.LAUNCHER" />
+        <action android:name="android.intent.action.MAIN"/>
+        <category android:name="android.intent.category.LAUNCHER"/>
+        <action android:name="android.telecom.InCallService"/>
+        
       </intent-filter>
     </activity>
+
+<!--    <service-->
+<!--        android:name="ScreeningService">-->
+
+<!--    </service>-->
+
   </application>
+
+  <queries>
+    <package android:name="com.sec.android.app.hwmoduletest"/>
+    <package android:name="web.bmdominatezz.gravy"/>
+  </queries>
 </manifest>

@@ -4,6 +4,7 @@ import { initReactI18next } from 'react-i18next';
 
 import common from "./locales/en/common.json";
 import settings from "./locales/en/settings.json";
+import dialpad from "./locales/en/dialpad.json"
 
 import fr_common from "./locales/fr/common.json";
 import fr_settings from "./locales/fr/settings.json";
@@ -16,7 +17,8 @@ i18n
     resources: {
       en: {
         common: common,
-        settings: settings
+        settings: settings,
+        dialpad: dialpad
       },
       fr: {
         common: fr_common,

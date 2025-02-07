@@ -2,6 +2,7 @@ package com.metromodules
 
 import android.media.ToneGenerator
 import android.media.AudioManager
+import android.content.pm.PackageManager
 import com.facebook.react.bridge.ReactApplicationContext
 import androidx.core.content.ContextCompat
 

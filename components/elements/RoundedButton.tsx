@@ -1,7 +1,7 @@
 import { useContext, useRef } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
-import Icon from "@react-native-vector-icons/foundation";
+import Icon from "@react-native-vector-icons/material-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { View, useWindowDimensions } from "react-native";
@@ -91,7 +91,7 @@ function RoundedButton({
                 }, translateStyle]}
             >
                 {/* @ts-ignore */}
-                <Icon name={icon} color={disabled? Colors[theme].secondary: Colors[theme].primary} size={size*0.625}/>
+                <Icon name={icon} color={disabled? Colors[theme].secondary: Colors[theme].primary} size={size*0.5}/>
             </Animated.View>
             </View>
         </TouchableWithoutFeedback>

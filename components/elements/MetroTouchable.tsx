@@ -60,8 +60,6 @@ function MetroTouchable({
 
             if (typeof onPressIn == "function") onPressIn();
         }
-
-        console.log(typeof onPress)
     }
 
     // should and maybe will replace it :p

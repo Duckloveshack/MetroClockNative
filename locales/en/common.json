@@ -2,5 +2,10 @@
     "appName": "Dialer",
     "multiSimCarrier": "Call using <0>{{carrier}}</0>",
     "noSim": "No SIM Installed",
-    "ok": "ok"
+    "ok": "ok",
+
+    "incomingType": "Incoming",
+    "outgoingType": "Outgoing",
+    "missedType": "Missed",
+    "unknownType": "Unknown"
 }

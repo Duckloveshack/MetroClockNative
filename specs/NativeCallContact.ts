@@ -1,6 +1,7 @@
 import { CountryCode } from "libphonenumber-js";
 import type { TurboModule } from "react-native";
 import { TurboModuleRegistry } from "react-native";
+import { EventEmitter } from "react-native/Libraries/Types/CodegenTypes";
 
 export interface Spec extends TurboModule {
     getConstants: () => {
@@ -21,6 +22,8 @@ export interface Spec extends TurboModule {
         number: string,
         type: number
     }>>
+
+    readonly onReceiveCall: EventEmitter<number>
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(

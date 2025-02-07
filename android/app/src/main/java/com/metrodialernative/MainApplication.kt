@@ -14,6 +14,7 @@ import com.facebook.soloader.SoLoader
 import com.metromodules.NativeDTMFPackage
 import com.metromodules.NativeMiscPackage
 import com.metromodules.NativeCallContactPackage
+import com.metromodules.NativeCallReceiverPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -26,6 +27,7 @@ class MainApplication : Application(), ReactApplication {
               add(NativeDTMFPackage())
               add(NativeMiscPackage())
               add(NativeCallContactPackage())
+              add(NativeCallReceiverPackage())
             }
 
         override fun getJSMainModuleName(): String = "index"

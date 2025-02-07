@@ -38,21 +38,21 @@ function TestScreenInternal({
         setBar({
             controls: [
                 {
-                    icon: "thumbnails",
+                    icon: "dialpad",
                     string: "dial",
                     onPress: () => { navigation.navigate("DialScreen") }
                 },
                 {
-                    icon: "telephone",
+                    icon: "phone",
                     string: "test"
                 },
                 {
-                    icon: "telephone",
+                    icon: "phone",
                     string: "test",
                     disabled: true
                 },
                 {
-                    icon: "telephone",
+                    icon: "phone",
                     string: "test test",
                 },
             ],

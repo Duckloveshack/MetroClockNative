@@ -1,19 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, ScrollView, NativeModules } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../../components/style/colors";
-import { SafeAreaView } from "react-native-safe-area-context";
 import FontStyles from "../../components/style/fonts";
-import BottomBar from "../../components/elements/BottomBar";
-import TitleSwitcher from "../../components/compound/TitleSwitcher";
 import LocalizationContext, { LocalizationContextProps } from "../../context/LocalizationContext";
 import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../../context/BottomBarContext";
-import { MainScreenProps } from "../../types/screens";
-import { useTranslation } from "react-i18next";
-import Button, { ModalButton } from "../../components/elements/Button";
-import MetroTabs, { ScreenletAttributes } from "../../components/elements/MetroTabs";
-import TestScreen from "../TestScreen";
-import Icon from "@react-native-vector-icons/foundation";
+import { ScreenletAttributes } from "../../components/elements/MetroTabs";
 import RoundedButton from "../../components/elements/RoundedButton";
 import { AsYouType, CountryCode } from "libphonenumber-js";
 import NativeCallContact from "../../specs/NativeCallContact";
@@ -62,18 +54,14 @@ function HistoryScreen({
                 // </View>
                 const type = (() => {
                     switch (call.type) {
-                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
-                            return "Incoming"
-                        }
-                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
-                            return "Outgoing"
-                        }
-                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: {
-                            return "Missed"
-                        }
-                        default: {
-                            return "Unknown"
-                        }
+                        case NativeCallContact.getConstants().CALL_TYPE_ANSWERED_EXTERNALLY:
+                        case NativeCallContact.getConstants().CALL_TYPE_INCOMING: { return "Incoming" }
+                        case NativeCallContact.getConstants().CALL_TYPE_BLOCKED:
+                        case NativeCallContact.getConstants().CALL_TYPE_REJECTED:
+                        case NativeCallContact.getConstants().CALL_TYPE_OUTGOING: { return "Outgoing" }
+                        case NativeCallContact.getConstants().CALL_TYPE_VOICEMAIL:
+                        case NativeCallContact.getConstants().CALL_TYPE_MISSED: { return "Missed" }
+                        default: { return "Unknown" }
                     }
                 })();
 

@@ -2,6 +2,7 @@ package com.metromodules
 
 import android.media.ToneGenerator
 import android.media.AudioManager
+import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
 
 class NativeDTMFModule(reactContext: ReactApplicationContext) : NativeDTMFSpec(reactContext) {
@@ -30,6 +31,7 @@ class NativeDTMFModule(reactContext: ReactApplicationContext) : NativeDTMFSpec(r
     }
 
     override fun playDTMFTone(digit: Double, duration: Double) {
+        Log.d("NativeDTMFModule", "Value received for digit is $digit")
         _startToneLocal(digit.toInt(), duration.toInt())
     }
 

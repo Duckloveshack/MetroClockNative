@@ -1,0 +1,14 @@
+{
+    "callButton": "call",
+    "saveButton": "save",
+
+    "b1Label": "",
+    "b2Label": "ABC",
+    "b3Label": "DEF",
+    "b4Label": "GHI",
+    "b5Label": "JKL",
+    "b6Label": "MNO",
+    "b7Label": "PQRS",
+    "b8Label": "TUV",
+    "b9Label": "WXYZ"
+}

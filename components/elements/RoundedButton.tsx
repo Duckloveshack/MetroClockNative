@@ -5,10 +5,12 @@ import Icon from "@react-native-vector-icons/material-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { View, useWindowDimensions } from "react-native";
+import { MetroActionView } from "./MetroTouchable";
+import glyphMap from "../../node_modules/@react-native-vector-icons/material-icons/glyphmaps/MaterialIcons.json"
 
 type Attributes = {
     size?: number
-    icon: string,
+    icon: keyof typeof glyphMap,
     disabled?: boolean,
     onPress?: () => any
 }
@@ -17,7 +19,7 @@ function RoundedButton({
     size=40,
     icon,
     disabled=false,
-    onPress
+    onPress=() => {}
 }: Attributes): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     const ref = useRef<View>(null);
@@ -31,11 +33,11 @@ function RoundedButton({
     function onPressIn() {
         if (!disabled) {
             ref.current?.measure((x: number, y: number, width: number, height: number, screenX: number, screenY: number) => {
-                translateX.value = withTiming((windowWidth/2-screenX)/100, {
+                translateX.value = withTiming((windowWidth/2-(screenX+width/2))/100, {
                     duration: 10,
                     easing: Easing.out(Easing.circle)
                 });
-                translateY.value = withTiming((windowHeight/2-screenY)/100, {
+                translateY.value = withTiming((windowHeight/2-(screenY+height/2))/100, {
                     duration: 10,
                     easing: Easing.out(Easing.circle)
                 });
@@ -69,32 +71,50 @@ function RoundedButton({
     }))
 
     return(
-        <TouchableWithoutFeedback
-            onPress={() => {
-                if (!disabled) {
-                    if (typeof onPress == "function" && !disabled) onPress();
-                }
+        // <TouchableWithoutFeedback
+        //     onPress={() => {
+        //         if (!disabled) {
+        //             if (typeof onPress == "function" && !disabled) onPress();
+        //         }
+        //     }}
+        //     onPressIn={onPressIn}
+        //     onPressOut={onPressOut}
+        // >
+        //     <View ref={ref}>
+        //     <Animated.View
+        //         style={[{
+        //             borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
+        //             borderWidth: 2,
+        //             width: size,
+        //             height: size,
+        //             borderRadius: size/2,
+        //             justifyContent: "center",
+        //             alignItems: "center"
+        //         }, translateStyle]}
+        //     >
+        //         {/* @ts-ignore */}
+        //         <Icon name={icon} color={disabled? Colors[theme].secondary: Colors[theme].primary} size={size*0.5}/>
+        //     </Animated.View>
+        //     </View>
+        // </TouchableWithoutFeedback>
+        <MetroActionView
+            style={{
+                borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
+                borderWidth: 2,
+                width: size,
+                height: size,
+                borderRadius: size/2,
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: buttonBackground
             }}
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
+            transformations={["position"]}
+            onTap={() => { if (!disabled) onPress() }}
+            onTapStart={() => { if (!disabled) buttonBackground.value = Colors.accentColor}}
+            onTapEnd={() => { buttonBackground.value = "#00000000" }}
         >
-            <View ref={ref}>
-            <Animated.View
-                style={[{
-                    borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
-                    borderWidth: 2,
-                    width: size,
-                    height: size,
-                    borderRadius: size/2,
-                    justifyContent: "center",
-                    alignItems: "center"
-                }, translateStyle]}
-            >
-                {/* @ts-ignore */}
-                <Icon name={icon} color={disabled? Colors[theme].secondary: Colors[theme].primary} size={size*0.5}/>
-            </Animated.View>
-            </View>
-        </TouchableWithoutFeedback>
+            <Icon name={icon} color={disabled? Colors[theme].secondary: Colors[theme].primary} size={size*0.5}/>
+        </MetroActionView>
     )
 }
 

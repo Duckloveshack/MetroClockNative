@@ -12,15 +12,16 @@ import { DialScreenProps, MainScreenProps } from "../types/screens";
 import MetroTabs from "../components/elements/MetroTabs";
 import HistoryScreen from "./screenlets/HistoryScreen";
 import NativeDTMF from "../specs/NativeDTMF";
-import MetroTouchable from "../components/elements/MetroTouchable";
-import { useSharedValue } from "react-native-reanimated";
+import MetroTouchable, { MetroActionView } from "../components/elements/MetroTouchable";
+import { AnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import Icon from "@react-native-vector-icons/material-icons";
 import { formatNumber } from "../context/NumberContext";
 import Orientation, { LANDSCAPE, OrientationType, PORTRAIT, PORTRAIT_UPSIDE_DOWN, useOrientationChange } from "react-native-orientation-locker";
 import NativeCallReceiver from "../specs/NativeCallReceiver";
+import { CallButton } from "../components/elements/Button";
 
-const BUTTON_GAP = 3;
+const BUTTON_GAP = 4;
 
 type DialButtonlikeAttributes = {
     tone?: number,
@@ -31,62 +32,34 @@ type DialButtonlikeAttributes = {
     style?: StyleProp<ViewStyle>
 }
 
-function DialButtonlike({
-    tone,
-    disabled = false,
-    onPress,
-    onLongPress,
-    children,
-    style
-}: DialButtonlikeAttributes): React.JSX.Element {
-    const { theme } = useContext<ThemeContextProps>(ThemeContext);
-
-    const buttonColor = useSharedValue(Colors[theme].middleground);
-
-    return (
-        <MetroTouchable
-            touchSoundDisabled
-            style={[{
-                flex: 1,
-                backgroundColor: !disabled? buttonColor: Colors[theme].middleground
-            }, style]}
-            onPress={() => {
-                //if (tone) NativeDTMF.playDTMFTone(tone, 200);
-                if (onPress) onPress();
-            }}
-            onPressIn={() => {
-                if (tone) NativeDTMF.playDTMFTone(tone, 200);
-                buttonColor.value = Colors.accentColor
-            }}
-            onPressOut={() => { buttonColor.value = Colors[theme].middleground }}
-            onLongPress={() => { if (onLongPress) onLongPress() }}
-        >
-            <View>
-                {children}
-            </View>
-        </MetroTouchable>
-    )
-}
-
 type DialButtonAttributes = {
     text: string,
     subtext?: string,
     tone?: number,
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
     onPress?: () => void,
     onLongPress?: () => void
 }
 
-function DialButton({
+export function DialButton({
     text,
     subtext,
     tone,
-    onPress,
-    onLongPress
+    style,
+    onPress = () => {},
+    onLongPress = () => {}
 }: DialButtonAttributes): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     return (
-        <DialButtonlike onPress={onPress} onLongPress={onLongPress} tone={tone}>
+        <CallButton
+            style={style}
+            onPress={() => {
+                if (tone) NativeDTMF.playDTMFTone(tone, 200);
+                onPress();
+            }}
+            onLongPress={onLongPress}
+        >
             <View
                 style={{
                     justifyContent: "space-around",
@@ -113,17 +86,21 @@ function DialButton({
                     {subtext}
                 </Text>
             </View>
-        </DialButtonlike>
+        </CallButton>
     )
 }
 
-function DialStarButton({
-    onPress
-}: { onPress?: () => void }): React.JSX.Element {
+export function DialStarButton({
+    onPress = () => {},
+    style
+}: {
+    onPress?: () => void,
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
+}): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     return (
-        <DialButtonlike onPress={onPress} tone={NativeDTMF.getConstants().TONE_DTMF_STAR}>
+        <CallButton style={style} onPress={() => { NativeDTMF.playDTMFTone(NativeDTMF.getConstants().TONE_DTMF_STAR, 200); onPress(); }}>
             <View
                 style={{
                     justifyContent: "space-around",
@@ -138,17 +115,21 @@ function DialStarButton({
                     *
                 </Text>
             </View>
-        </DialButtonlike>
+        </CallButton>
     )
 }
 
-function DialPoundButton({
-    onPress
-}: { onPress?: () => void }): React.JSX.Element {
+export function DialPoundButton({
+    onPress = () => {},
+    style
+}: {
+    onPress?: () => void,
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
+}): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     return (
-        <DialButtonlike onPress={onPress} tone={NativeDTMF.getConstants().TONE_DTMF_POUND}>
+        <CallButton style={style} onPress={() => { NativeDTMF.playDTMFTone(NativeDTMF.getConstants().TONE_DTMF_STAR, 200); onPress(); }}>
             <View
                 style={{
                     justifyContent: "space-around",
@@ -163,7 +144,7 @@ function DialPoundButton({
                     #
                 </Text>
             </View>
-        </DialButtonlike>
+        </CallButton>
     )
 }
 
@@ -179,7 +160,7 @@ function DialSaveButton({
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     return (
-        <DialButtonlike onPress={number.length !== 0? onPress: () => {}} disabled={number.length === 0}>
+        <CallButton onPress={number.length !== 0? onPress: () => {}} disabled={number.length === 0}>
             <View style={{
                 alignItems: "center",
                 height: "100%",
@@ -195,7 +176,7 @@ function DialSaveButton({
                     {text}
                 </Text>
             </View>
-        </DialButtonlike>
+        </CallButton>
     )
 }
 
@@ -210,19 +191,22 @@ function DialCallButton({
 }):React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
+    const backgroundColor = useSharedValue(0);
+
     return (
-        <DialButtonlike onPress={number.length !== 0? onPress: () => {}} disabled={number.length === 0} style={{ flex: 2.02}}>
+        <CallButton onPress={number.length !== 0? onPress: () => {}} disabled={number.length === 0} style={{ flex: 2.02}}>
             <View style={{
                 alignItems: "center",
                 height: "100%",
                 paddingVertical: "auto",
-                justifyContent: "center"
+                justifyContent: "center",
+                backgroundColor: number.length !== 0? Colors.accentColor: Colors[theme].middleground
             }}>
                 <Text style={[{ color: number.length !== 0? Colors[theme].primary: Colors[theme].secondary }, FontStyles.info]}>
                     {text}
                 </Text>
             </View>
-        </DialButtonlike>
+        </CallButton>
     )
 }
 
@@ -236,7 +220,7 @@ function DialScreen({
 
     const [ dialedNumber, setDialedNumber ] = useState<string>("");
     //@ts-ignore
-    const [ orientation, setOrientation] = useState<OrientationType>(PORTRAIT)
+    const [ orientation, setOrientation] = useState<OrientationType>(Orientation.getOrientation((orientation) => { return orientation }))
     const deleteInterval = useRef<NodeJS.Timeout>();
 
     const {height, width} = useWindowDimensions();
@@ -245,17 +229,6 @@ function DialScreen({
     useOrientationChange((orientation: OrientationType) => {
         setOrientation(orientation);
     })
-
-    NativeCallReceiver.startObserving();
-
-    NativeCallReceiver.onCallChangeState((state) => {
-        console.log(`Call state: ${state}`)
-    });
-
-    NativeCallReceiver.onScreenCall((number) => {
-        console.log(`Phone number: ${number}`)
-    })
-
 
     return(
         <View style={{
@@ -277,13 +250,6 @@ function DialScreen({
                         <View style={{ flex: 1, padding: 15}}>
                                 <TitleSwitcher/>
                         </View>
-                        {/* <TextInput
-                            style={[{
-                                color: Colors[theme].primary,
-                            }, FontStyles.title]}
-                            showSoftInputOnFocus={false}
-                            autoFocus
-                        /> */}
                         <View style={{
                             flex: 5,
                             paddingHorizontal: 15,
@@ -300,31 +266,43 @@ function DialScreen({
                             >
                                 {formatNumber(dialedNumber)}
                             </Text>
-                            {dialedNumber.length !== 0? <TouchableWithoutFeedback
-                                onPress={() => { setDialedNumber(dialedNumber.slice(0, -1))}}
-                                onPressIn={() => {
-                                    deleteInterval.current = setInterval(() => {
-                                        setDialedNumber((number) => {
-                                            return number.slice(0, -1);
-                                        });
-                                    }, 200)
-                                }}
-                                onPressOut={() => { clearInterval(deleteInterval.current) }}
-                                delayPressIn={500}
-                            >
-                                <Icon
-                                    name="backspace"
-                                    color={Colors[theme].primary}
-                                    size={40}
-                                    style={{ marginTop: 20, height: 40, paddingStart: 10 }}
-                                />
-                            </TouchableWithoutFeedback>: <></>}
+                            {dialedNumber.length !== 0? (
+                                <MetroActionView
+                                    transformations={[ "position" ]}
+                                    delayTapStart={500}
+                                    onTap={() => { setDialedNumber(dialedNumber.slice(0, -1)) }}
+                                    onTapStart={() => {
+                                        deleteInterval.current = setInterval(() => {
+                                            setDialedNumber((number) => {
+                                                if (number.length !== 0) {
+                                                    return number.slice(0, -1);
+                                                } else {
+                                                    clearInterval(deleteInterval.current)
+                                                    return number
+                                                }
+                                            });
+                                        }, 200)
+                                    }}
+                                    onTapEnd={() => { clearInterval(deleteInterval.current) }}
+                                >
+                                    <Icon
+                                        name="backspace"
+                                        color={Colors[theme].primary}
+                                        size={40}
+                                        style={{ marginTop: 20, height: 40, paddingStart: 10 }}
+                                    />
+                                </MetroActionView>
+                            ): <></>}
                         </View>
                     </View>
                         <View
                             style={{
                                 flex: isLandscape? 2: 4,
                                 gap: BUTTON_GAP,
+                                backgroundColor: Colors[theme].foreground,
+                                paddingTop: isLandscape? 0: BUTTON_GAP,
+                                paddingLeft: orientation === OrientationType["LANDSCAPE-LEFT"]? BUTTON_GAP: 0,
+                                paddingRight: orientation === OrientationType["LANDSCAPE-RIGHT"]? BUTTON_GAP: 0
                             }}
                         >
                             <View style={{

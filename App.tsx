@@ -16,6 +16,7 @@ import MainScreen from './screens/MainScreen';
 import BootSplash from "react-native-bootsplash";
 import SplashScreen from './screens/_SplashScreen';
 import DialScreen from './screens/DialScreen';
+import CallScreen from './screens/CallScreen';
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
@@ -194,6 +195,7 @@ function NavigatorComponent(): React.JSX.Element {
           }
         }
       }}/>
+      <Stack.Screen name="CallScreen" component={CallScreen}/>
     </Stack.Navigator>
   )
 }

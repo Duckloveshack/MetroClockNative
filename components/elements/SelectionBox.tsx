@@ -27,10 +27,10 @@ function SelectionBox({
 }: Attributes): React.JSX.Element {
     const [expanded, setExpanded] = useState<boolean>(false);
     const [selected, setSelected] = useState<string>(defaultValue || options[0]?.value || "");
+    const [index, setIndex] = useState<number>(0);
 
     const boxHeight = useSharedValue(NORMAL_BOX_HEIGHT);
-    const optionHeight = useSharedValue(0);
-    const selectedHeight = useSharedValue(NORMAL_BOX_HEIGHT-6);
+    const yTranslation = useSharedValue(0);
     const zIndex = useSharedValue(0);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
@@ -40,37 +40,30 @@ function SelectionBox({
         borderWidth: 3,
         backgroundColor: expanded? Colors[theme].primary: Colors[theme].background,
         borderColor: disabled? Colors[theme].secondary: expanded? Colors.accentColor: Colors[theme].primary,
-        paddingTop: expanded? 4: 0,
+        gap: 4,
+        overflow: "hidden"
     }));
 
     useEffect(() => {
         if (expanded) {
             zIndex.value = 10;
-            boxHeight.value = withTiming((NORMAL_BOX_HEIGHT+4)*options.length+14, {
+            boxHeight.value = withTiming((NORMAL_BOX_HEIGHT)*options.length+14, {
                 duration: 250,
                 easing: Easing.out(Easing.circle)
             });
-            optionHeight.value = withTiming(NORMAL_BOX_HEIGHT+4, {
+            yTranslation.value = withTiming(4, {
                 duration: 250,
                 easing: Easing.out(Easing.circle)
-            });
-            selectedHeight.value = withTiming(NORMAL_BOX_HEIGHT+4, {
-                duration: 250,
-                easing: Easing.out(Easing.circle)
-            });
+            })
         } else {
             boxHeight.value = withTiming(NORMAL_BOX_HEIGHT, {
                 duration: 250,
                 easing: Easing.out(Easing.circle)
             });
-            optionHeight.value = withTiming(0, {
+            yTranslation.value = withTiming(-index*(NORMAL_BOX_HEIGHT), {
                 duration: 250,
                 easing: Easing.out(Easing.circle)
-            });
-            selectedHeight.value = withTiming(NORMAL_BOX_HEIGHT-6, {
-                duration: 250,
-                easing: Easing.out(Easing.circle)
-            });
+            })
             setTimeout(() => zIndex.value = 0, 250)
         }
     }, [expanded]);
@@ -81,7 +74,7 @@ function SelectionBox({
             style={{
                 flex: 1,
                 height: NORMAL_BOX_HEIGHT,
-                zIndex: zIndex
+                zIndex: zIndex,
             }}
         >
             <Animated.View style={boxStyle}>
@@ -92,18 +85,20 @@ function SelectionBox({
                                 setExpanded(!expanded)
                                 if (expanded) {
                                     setSelected(option.value);
+                                    setIndex(index);
                                     if (typeof onChange === "function") onChange(option.value);
                                 }
                             }
                         }}
                         key={index}
                     > 
-                        <MetroTouchable style={{ marginEnd: "auto", marginStart: 10 }} disabled={!expanded || disabled}>
+                        <MetroTouchable style={{ marginEnd: "auto", marginStart: 10 }} disabled={disabled || !expanded}>
                             <Animated.Text
                                 style={[{
                                     color: disabled || option.disabled? Colors[theme].secondary: expanded? ( selected === option.value? Colors.accentColor: Colors[theme].background ): Colors[theme].primary,
-                                    height: selected === option.value? selectedHeight: optionHeight,
+                                    height: NORMAL_BOX_HEIGHT-4,
                                     verticalAlign: "middle",
+                                    transform: [{ translateY: yTranslation }]
                                 }, FontStyles.box]}
                             >
                                 {option.name}

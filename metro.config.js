@@ -7,6 +7,7 @@ const { wrapWithReanimatedMetroConfig } = require("react-native-reanimated/metro
  *
  * @type {import('@react-native/metro-config').MetroConfig}
  */
-const config = {};
+const config = {
+};
 
 module.exports = wrapWithReanimatedMetroConfig(mergeConfig(getDefaultConfig(__dirname), config));

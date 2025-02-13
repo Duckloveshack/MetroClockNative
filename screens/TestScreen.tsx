@@ -111,6 +111,10 @@ function TestScreenInternal({
                         onPress={() => { navigation.navigate("MainScreen") }}
                     />
                     <Button
+                        text="CallScreen"
+                        onPress={() => { navigation.navigate("CallScreen", { number: "1"}) }}
+                    />
+                    <Button
                         text="Open Test Modal"
                         onPress={() => { navigation.navigate("ModalScreen", { title: "test", subtitle: "hai!!!" }) }}
                     />

@@ -11,6 +11,9 @@ export type RootStackParamList = {
         subtitle?: string,
         components?: React.ReactNode
     },
+    CallScreen: {
+        number: string
+    }
 }
 
 export type SplashScreenProps = StackScreenProps<
@@ -41,4 +44,9 @@ export type SettingsScreenProps = StackScreenProps<
 export type ModalScreenProps = StackScreenProps<
     RootStackParamList,
     "ModalScreen"
+>
+
+export type CallScreenProps = StackScreenProps<
+    RootStackParamList,
+    "CallScreen"
 >

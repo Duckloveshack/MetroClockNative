@@ -6,7 +6,7 @@ import FontStyles from "../style/fonts";
 import SimContext, { SimContextProps } from "../../context/SimContext";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
-import MetroTouchable from "./MetroTouchable";
+import MetroTouchable, { MetroActionView } from "./MetroTouchable";
 
 function SIMSwitch(): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
@@ -25,11 +25,13 @@ function SIMSwitch(): React.JSX.Element {
     }))
 
     return(
-        <MetroTouchable>
-        <View style={{
-            height: 30,
-            width: 40*sims.length
-        }}>
+        <MetroActionView    
+            style={{
+                height: 30,
+                width: 40*sims.length
+            }}
+            transformations={["rotation"]}
+        >
             <View style={{ 
                 flexDirection: "row",
                 position: "absolute"
@@ -83,8 +85,7 @@ function SIMSwitch(): React.JSX.Element {
                     </TouchableWithoutFeedback>
                 ))}
             </View>
-        </View>
-        </MetroTouchable>
+        </MetroActionView>
     )
 }
 

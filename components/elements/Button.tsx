@@ -2,8 +2,8 @@ import { useContext } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
-import { AnimatedStyle, useSharedValue} from "react-native-reanimated";
-import MetroTouchable from "./MetroTouchable";
+import { AnimatedStyle, useAnimatedStyle, useSharedValue} from "react-native-reanimated";
+import MetroTouchable, { MetroActionView } from "./MetroTouchable";
 import { StyleProp, Text, ViewStyle } from "react-native";
 
 type Attributes = {
@@ -33,20 +33,22 @@ function Button({
         backgroundColor.value = "#00000000";
     }
 
+    const backgroundColorStyle = useAnimatedStyle(() => ({
+        backgroundColor: backgroundColor.value
+    }))
+
     return(
-        <MetroTouchable
-            disabled={disabled}
+        <MetroActionView
             style={[{
                 borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
                 borderWidth: 3,
-                //paddingVertical: 6,
                 marginEnd: "auto",
-                backgroundColor: backgroundColor,
-                marginVertical: 10
-            }, style]}
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
-            onPress={onPress}
+                marginVertical: 10,
+            }, backgroundColorStyle, style]}
+            onTap={onPress}
+            onTapStart={onPressIn}
+            onTapEnd={onPressOut}
+            enabled={!disabled}
         >
             {children || <></>}
             <Text style={[{
@@ -56,7 +58,7 @@ function Button({
             }, FontStyles.box]}>
                 {text}
             </Text>
-        </MetroTouchable>
+        </MetroActionView>
     )
 }
 
@@ -106,6 +108,48 @@ export function ModalButton({
                 {text}
             </Text>
         </MetroTouchable>
+    )
+}
+
+type CallButtonAttributes = {
+    disabled?: boolean,
+    onPress?: () => void,
+    onPressIn?: () => void,
+    onPressOut?: () => void,
+    onLongPress?: () => void
+    children: React.ReactNode,
+    style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>,
+}
+
+export function CallButton({
+    disabled = false,
+
+    onPress = () => {},
+    onLongPress = () => {},
+    onPressIn = () => {},
+    onPressOut = () => {},
+
+    children,
+    style,
+}: CallButtonAttributes): React.JSX.Element {
+    const { theme } = useContext<ThemeContextProps>(ThemeContext);
+
+    const buttonColor = useSharedValue(Colors[theme].middleground);
+
+    return (
+        <MetroActionView
+            style={[{
+                flex: 1,
+                backgroundColor: !disabled? buttonColor: Colors[theme].middleground
+            }, style]}
+            onTap={onPress}
+            onTapStart={() => { buttonColor.value = Colors.accentColor; onPressIn(); }}
+            onTapEnd={() => { buttonColor.value = Colors[theme].middleground; onPressOut(); }}
+            onHold={onLongPress}
+            transformations={[ "position", "scale", "rotation"]}
+        >
+            {children}
+        </MetroActionView>
     )
 }
 

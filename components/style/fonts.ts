@@ -19,7 +19,7 @@ const FontStyles = StyleSheet.create({
     },
     link: {
         fontSize: 30,
-        fontWeight: 200,
+        fontWeight: 300,
     },
     description: {
         fontSize: 12,

@@ -91,7 +91,7 @@ function HistoryScreen({
                             }, FontStyles.objectTitle]}>
                                 {call.cached_name || new AsYouType(call.country_iso || "US").input(call.number)}
                             </Text>
-                            <RoundedButton icon="torsos"/>
+                            <RoundedButton icon="people"/>
                         </View>
                         <Text style={[{
                             color: Colors[theme].secondary,

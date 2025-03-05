@@ -73,41 +73,54 @@ export function ModalButton({
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
-    function onPressIn(): void {
-        backgroundColor.value = Colors.accentColor
-    }
-
-    function onPressOut(): void {
-        backgroundColor.value = "#00000000";
-    }
-
     return(
-        <MetroTouchable
-            disabled={disabled}
+        // <MetroTouchable
+        //     disabled={disabled}
+        //     style={[{
+        //         borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
+        //         borderWidth: 3,
+        //         //paddingVertical: 6,
+        //         backgroundColor: backgroundColor,
+        //         marginTop: 10,
+        //         paddingLeft: "auto",
+        //         flex: 1,
+        //         height: "auto"
+        //     }, style]}
+        //     onPressIn={onPressIn}
+        //     onPressOut={onPressOut}
+        //     onPress={onPress}
+        //     ignoreStatusBarHeight={false}
+        // >
+        //     {children || <></>}
+        //     <Text style={[{
+        //         color: disabled? Colors[theme].secondary: Colors[theme].primary,
+        //         marginHorizontal: "auto",
+        //         marginVertical: 6
+        //     }, FontStyles.info]}>
+        //         {text}
+        //     </Text>
+        // </MetroTouchable>
+        <MetroActionView
             style={[{
                 borderColor: disabled? Colors[theme].secondary: Colors[theme].primary,
                 borderWidth: 3,
-                //paddingVertical: 6,
-                backgroundColor: backgroundColor,
+                marginEnd: "auto",
                 marginTop: 10,
-                paddingLeft: "auto",
-                flex: 1,
-                height: "auto"
+                flex: 1
             }, style]}
-            onPressIn={onPressIn}
-            onPressOut={onPressOut}
-            onPress={onPress}
-            ignoreStatusBarHeight={false}
+            onTap={onPress}
+            enabled={!disabled}
         >
             {children || <></>}
             <Text style={[{
                 color: disabled? Colors[theme].secondary: Colors[theme].primary,
-                marginHorizontal: "auto",
-                marginVertical: 6
-            }, FontStyles.info]}>
+                marginHorizontal: 10,
+                marginVertical: 6,
+                textAlign: "center"
+            }, FontStyles.box]}>
                 {text}
             </Text>
-        </MetroTouchable>
+        </MetroActionView>
     )
 }
 
@@ -147,6 +160,7 @@ export function CallButton({
             onTapEnd={() => { buttonColor.value = Colors[theme].middleground; onPressOut(); }}
             onHold={onLongPress}
             transformations={[ "position", "scale", "rotation"]}
+            enabled={!disabled}
         >
             {children}
         </MetroActionView>

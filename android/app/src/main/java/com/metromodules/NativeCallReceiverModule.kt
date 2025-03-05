@@ -26,7 +26,6 @@ class NativeCallReceiverModule(reactContext: ReactApplicationContext) : NativeCa
     lateinit private var phoneStateReceiver: PhoneStateReceiver;
 
     private var telephonyManager = reactContext.getSystemService(ReactApplicationContext.TELEPHONY_SERVICE) as TelephonyManager
-    private var InScreeningService = Intent(reactApplicationContext, ScreeningService::class.java);
 
     override fun getName() = NAME
 
@@ -49,8 +48,6 @@ class NativeCallReceiverModule(reactContext: ReactApplicationContext) : NativeCa
             val intentFilter = IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
             reactApplicationContext.registerReceiver(phoneStateReceiver, intentFilter);
         }
-
-        reactApplicationContext.startService(InScreeningService)
     }
 
     private fun unregisterCallbacks() {
@@ -61,8 +58,6 @@ class NativeCallReceiverModule(reactContext: ReactApplicationContext) : NativeCa
             // Old APIs
             reactApplicationContext.unregisterReceiver(phoneStateReceiver);
         }
-
-        reactApplicationContext.stopService(InScreeningService)
     }
 
     // NEW: Handle changing call state
@@ -78,14 +73,6 @@ class NativeCallReceiverModule(reactContext: ReactApplicationContext) : NativeCa
         override fun onReceive(context: Context, intent: Intent) {
             val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             emitOnCallChangeState(state)
-        }
-    }
-
-    // Handles info when called is received
-    inner class ScreeningService: CallScreeningService() {
-        override fun onScreenCall(details: Call.Details) {
-            val incomingNumber = details.getHandle()
-            emitOnScreenCall(incomingNumber.toString())
         }
     }
 

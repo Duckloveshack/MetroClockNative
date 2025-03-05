@@ -1,8 +1,12 @@
 package com.metromodules
 
 import android.content.ContentResolver
+import android.content.Intent
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CallLog.Calls
+import android.telecom.TelecomManager
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactContextBaseJavaModule
@@ -74,6 +78,15 @@ class NativeCallContactModule(reactContext: ReactApplicationContext) : NativeCal
         } catch (err: Exception) {
             promise.reject("CALL_LOG_ERROR", "Failed to fetch call logs", err);
         }
+    }
+
+    override fun startCall(number: String, simIndex: Double) {
+        val telecomManager = reactApplicationContext.getSystemService(Context.TELECOM_SERVICE) as TelecomManager;
+        val callUri = Uri.parse("tel:$number");
+        val bundle = Bundle();
+        //bundle.putInt(TelecomManager.EXTRA_)
+
+        telecomManager.placeCall(callUri, bundle);
     }
 
     companion object {

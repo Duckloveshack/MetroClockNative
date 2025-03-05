@@ -12,6 +12,7 @@ import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../c
 import { TestScreenProps } from "../types/screens";
 import { useTranslation } from "react-i18next";
 import Button, { ModalButton } from "../components/elements/Button";
+import NativeMisc from "../specs/NativeMisc";
 
 function TestScreen({
     route,
@@ -117,6 +118,30 @@ function TestScreenInternal({
                     <Button
                         text="Open Test Modal"
                         onPress={() => { navigation.navigate("ModalScreen", { title: "test", subtitle: "hai!!!" }) }}
+                    />
+                    <Button
+                        text="Dialer Information"
+                        onPress={() => { navigation.navigate("ModalScreen", { title: "Dialer Role Information", subtitle: `Role Available? ${NativeMisc.isDialerRoleAvailable()}\nRole Held? ${NativeMisc.isDialerRoleHeld()}`}) }}
+                    />
+                    <Button
+                        text="Dialer Request"
+                        onPress={() => { NativeMisc.requestDialerRole()
+                            .then((resultCode) => {
+                                navigation.navigate("ModalScreen", {
+                                    title: "Role Request resultCode",
+                                    subtitle: resultCode == NativeMisc.getConstants().RESULT_OK? "RESULT_OK":
+                                        resultCode == NativeMisc.getConstants().RESULT_CANCELED? "RESULT_CANCELED":
+                                        "N/A"
+                                        + "\nInteger Code: " + resultCode
+                                });
+                            })
+                            .catch((error) => {
+                                navigation.navigate("ModalScreen", {
+                                    title: "Role Request Error!",
+                                    subtitle: `${error}. Check the console for more information.`
+                                });
+                            });
+                        }}
                     />
                 </ScrollView>
                 {/* </MetroScroll> */}

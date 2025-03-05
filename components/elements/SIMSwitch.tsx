@@ -1,11 +1,11 @@
-import { Text, View } from "react-native"
+import { Text, View, TouchableWithoutFeedback } from "react-native"
 import { useContext, useEffect } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
 import SimContext, { SimContextProps } from "../../context/SimContext";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+// import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import MetroTouchable, { MetroActionView } from "./MetroTouchable";
 
 function SIMSwitch(): React.JSX.Element {

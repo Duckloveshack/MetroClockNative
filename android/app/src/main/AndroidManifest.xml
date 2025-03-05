@@ -11,7 +11,7 @@
 <!--  <uses-permission android:name="android.permission.WRITE_EMBEDDED_SUBSCRIPTIONS" />-->
   <uses-permission android:name="android.permission.READ_CONTACTS" />
   <uses-permission android:name="android.permission.READ_CALL_LOG"/>
-  <uses-permission android:name="android.permission.MANAGE_OWN_CALLS"/>
+  <uses-permission android:name="android.permission.CALL_PHONE"/>
 
   <application
     android:name=".MainApplication"
@@ -37,19 +37,30 @@
       </intent-filter>
     </activity>
 
-   <service
-      android:name="io.github.duckloveshack.metro_dialer_native.CallService"
-      android:permission="android.permission.BIND_SCREENING_SERVICE"
+  <service android:name="io.github.duckloveshack.metro_dialer_native.CallService"
+            android:permission="android.permission.BIND_INCALL_SERVICE"
+            android:exported="true">
+        <meta-data android:name="android.telecom.IN_CALL_SERVICE_UI" android:value="true" />
+        <meta-data android:name="android.telecom.IN_CALL_SERVICE_RINGING"
+            android:value="true" />
+        <intent-filter>
+            <action android:name="android.telecom.InCallService"/>
+        </intent-filter>
+  </service>
+ 
+
+    <service
+      android:name="io.github.duckloveshack.metro_dialer_native.ConnectService"
+      android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
       android:exported="false">
       <intent-filter>
-          <action android:name="android.telecom.CallScreeningService"/>
+          <action android:name="android.telecom.ConnectionService"/>
       </intent-filter>
    </service>
 
   </application>
 
   <queries>
-    <package android:name="com.sec.android.app.hwmoduletest"/>
     <package android:name="web.bmdominatezz.gravy"/>
   </queries>
 </manifest>

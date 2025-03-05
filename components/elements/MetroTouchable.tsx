@@ -327,7 +327,7 @@ export function MetroActionView({
         .runOnJS(true)
         .onStart(onTap);
         
-    const combinedGesture = Gesture.Simultaneous(panGestureAnimation, panGestureFunctional, longPressGesture, tapGesture);
+    const combinedGesture = Gesture.Simultaneous(tapGesture, panGestureAnimation, panGestureFunctional, longPressGesture);
 
     const transformStyle = useAnimatedStyle(() => ({
         transform: [

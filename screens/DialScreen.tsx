@@ -13,13 +13,15 @@ import MetroTabs from "../components/elements/MetroTabs";
 import HistoryScreen from "./screenlets/HistoryScreen";
 import NativeDTMF from "../specs/NativeDTMF";
 import MetroTouchable, { MetroActionView } from "../components/elements/MetroTouchable";
-import { AnimatedStyle, useSharedValue } from "react-native-reanimated";
+import Animated, { AnimatedStyle, useSharedValue } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import Icon from "@react-native-vector-icons/material-icons";
 import { formatNumber } from "../context/NumberContext";
 import Orientation, { LANDSCAPE, OrientationType, PORTRAIT, PORTRAIT_UPSIDE_DOWN, useOrientationChange } from "react-native-orientation-locker";
 import NativeCallReceiver from "../specs/NativeCallReceiver";
 import { CallButton } from "../components/elements/Button";
+import NativeCallContact from "../specs/NativeCallContact";
+import SimContext, { SimContextProps } from "../context/SimContext";
 
 const BUTTON_GAP = 4;
 
@@ -191,20 +193,49 @@ function DialCallButton({
 }):React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
-    const backgroundColor = useSharedValue(0);
+    const textColor = useSharedValue<string>(Colors[theme].primary);
+    const bgColor = useSharedValue<string>(Colors.accentColor);
+
+    useEffect(() => {
+        if (number.length !== 0) {
+            bgColor.value = Colors.accentColor;
+            setTimeout(() => { textColor.value = Colors[theme].primary; }, 1);
+        } else {
+            bgColor.value = Colors[theme].middleground;
+            setTimeout(() => { textColor.value = Colors[theme].secondary; }, 1);
+        }
+    }, [number])
 
     return (
-        <CallButton onPress={number.length !== 0? onPress: () => {}} disabled={number.length === 0} style={{ flex: 2.02}}>
+        <CallButton
+            onPress={number.length !== 0? onPress: () => {}}
+            disabled={number.length === 0}
+            onPressIn={() => {
+                if (number.length !== 0) {
+                    bgColor.value = Colors[theme].primary;
+                    setTimeout(() => { textColor.value = Colors[theme].background; }, 1);
+                }
+            }}
+            onPressOut={() => {
+                if (number.length !== 0) {
+                    bgColor.value = Colors.accentColor; 
+                    setTimeout(() => { textColor.value = Colors[theme].primary; }, 1);
+                }
+            }}
+            style={{
+                backgroundColor: bgColor,
+                flex: 2.02
+            }}
+        >
             <View style={{
                 alignItems: "center",
                 height: "100%",
                 paddingVertical: "auto",
                 justifyContent: "center",
-                backgroundColor: number.length !== 0? Colors.accentColor: Colors[theme].middleground
             }}>
-                <Text style={[{ color: number.length !== 0? Colors[theme].primary: Colors[theme].secondary }, FontStyles.info]}>
+                <Animated.Text style={[{ color: textColor }, FontStyles.info]}>
                     {text}
-                </Text>
+                </Animated.Text>
             </View>
         </CallButton>
     )
@@ -217,6 +248,7 @@ function DialScreen({
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
     const { t } = useTranslation(["dialpad"]);
+    const { currentSim } = useContext<SimContextProps>(SimContext);
 
     const [ dialedNumber, setDialedNumber ] = useState<string>("");
     //@ts-ignore
@@ -346,7 +378,15 @@ function DialScreen({
                                 gap: BUTTON_GAP,
                                 flex: 1
                             }}>
-                                <DialCallButton text={t("callButton")} number={dialedNumber} onPress={() => {}}/>
+                                <DialCallButton
+                                    text={t("callButton")}
+                                    number={dialedNumber}
+                                    onPress={() => {
+                                        if (dialedNumber.length !== 0) {
+                                            NativeCallContact.startCall(dialedNumber, currentSim);
+                                        }
+                                    }}
+                                />
                                 <DialSaveButton text={t("saveButton")} number={dialedNumber} onPress={() => {}}/>
                             </View>
                     </View>

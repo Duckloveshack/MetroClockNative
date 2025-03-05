@@ -23,6 +23,8 @@ export interface Spec extends TurboModule {
         type: number
     }>>
 
+    startCall(number: string, simIndex: number): void;
+
     readonly onReceiveCall: EventEmitter<number>
 }
 

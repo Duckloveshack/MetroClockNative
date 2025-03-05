@@ -76,13 +76,13 @@ function CallScreenEndButton({
                 flex: 2.02,
                 backgroundColor: bgColor
             }}
-            onPressIn={() => {
+            onPressIn={async () => {
                 bgColor.value = Colors[theme].primary;
-                textColor.value = Colors[theme].background;
+                setTimeout(() => { textColor.value = Colors[theme].background; }, 1);
             }}
-            onPressOut={() => {
+            onPressOut={async () => {
                 bgColor.value = Colors.accentColor; 
-                textColor.value = Colors[theme].primary;
+                setTimeout(() => { textColor.value = Colors[theme].primary; }, 1);
             }}
         >
             <View style={{

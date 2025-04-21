@@ -10,9 +10,6 @@ export type RootStackParamList = {
         title: string,
         subtitle?: string,
         components?: React.ReactNode
-    },
-    CallScreen: {
-        number: string
     }
 }
 
@@ -44,9 +41,4 @@ export type SettingsScreenProps = StackScreenProps<
 export type ModalScreenProps = StackScreenProps<
     RootStackParamList,
     "ModalScreen"
->
-
-export type CallScreenProps = StackScreenProps<
-    RootStackParamList,
-    "CallScreen"
 >

@@ -1,18 +1,19 @@
 package com.metromodules
 
+import android.Manifest
 import android.content.ContentResolver
-import android.content.Intent
 import android.content.Context
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
 import android.provider.CallLog.Calls
+import android.provider.ContactsContract
 import android.telecom.TelecomManager
+import androidx.annotation.RequiresPermission
+import androidx.core.net.toUri
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
-import com.facebook.react.bridge.ReactContextBaseJavaModule
-import com.facebook.react.bridge.ReactMethod
-import com.facebook.react.bridge.WritableArray
 import com.facebook.react.bridge.ReactApplicationContext
+import com.facebook.react.bridge.WritableArray
 
 class NativeCallContactModule(reactContext: ReactApplicationContext) : NativeCallContactSpec(reactContext) {
     override fun getTypedExportedConstants(): MutableMap<String, Any> {
@@ -30,7 +31,7 @@ class NativeCallContactModule(reactContext: ReactApplicationContext) : NativeCal
     override fun getName() = NAME
 
     private fun getCallsLocal(count: Int): WritableArray {
-        var bundle = Bundle();
+        val bundle = Bundle()
         bundle.putInt(
             ContentResolver.QUERY_ARG_LIMIT,
             count
@@ -44,49 +45,60 @@ class NativeCallContactModule(reactContext: ReactApplicationContext) : NativeCal
             null
         )
 
-        val callsNative = Arguments.createArray();
+        val callsNative = Arguments.createArray()
 
         cursor?.use {
             val indexCachedName = it.getColumnIndex(Calls.CACHED_NAME)
             val indexCountryISO = it.getColumnIndex(Calls.COUNTRY_ISO)
-            val indexDate = it.getColumnIndex(Calls.DATE);
-            val indexDuration = it.getColumnIndex(Calls.DURATION);
-            val indexNumber = it.getColumnIndex(Calls.NUMBER);
-            val indexType = it.getColumnIndex(Calls.TYPE);
+            val indexDate = it.getColumnIndex(Calls.DATE)
+            val indexDuration = it.getColumnIndex(Calls.DURATION)
+            val indexNumber = it.getColumnIndex(Calls.NUMBER)
+            val indexType = it.getColumnIndex(Calls.TYPE)
 
             while (it.moveToNext()) {
-                val callMap = Arguments.createMap();
+                val callMap = Arguments.createMap()
 
                 callMap.putString("cached_name", cursor.getString(indexCachedName))
-                callMap.putString("country_iso", cursor.getString(indexCountryISO));
-                callMap.putDouble("date", cursor.getLong(indexDate).toDouble());
-                callMap.putDouble("duration", cursor.getLong(indexDuration).toDouble());
-                callMap.putString("number", cursor.getString(indexNumber));
-                callMap.putDouble("type", cursor.getInt(indexType).toDouble());
+                callMap.putString("country_iso", cursor.getString(indexCountryISO))
+                callMap.putDouble("date", cursor.getLong(indexDate).toDouble())
+                callMap.putDouble("duration", cursor.getLong(indexDuration).toDouble())
+                callMap.putString("number", cursor.getString(indexNumber))
+                callMap.putDouble("type", cursor.getInt(indexType).toDouble())
 
-                callsNative.pushMap(callMap);
+                callsNative.pushMap(callMap)
             }
         }
 
-        return callsNative;
+        return callsNative
     }
 
     override fun fetchCallLogs(count: Double, promise: Promise) {
         try {
-            val result = getCallsLocal(count.toInt());
+            val result = getCallsLocal(count.toInt())
             promise.resolve(result)
         } catch (err: Exception) {
-            promise.reject("CALL_LOG_ERROR", "Failed to fetch call logs", err);
+            promise.reject("CALL_LOG_ERROR", "Failed to fetch call logs", err)
         }
     }
 
+    override fun createModifyContact(number: String?) {
+        val intent = Intent(Intent.ACTION_INSERT_OR_EDIT).apply {
+            type = ContactsContract.Contacts.CONTENT_ITEM_TYPE
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, number)
+
+        reactApplicationContext.startActivity(intent)
+    }
+
+    @RequiresPermission(Manifest.permission.CALL_PHONE)
     override fun startCall(number: String, simIndex: Double) {
-        val telecomManager = reactApplicationContext.getSystemService(Context.TELECOM_SERVICE) as TelecomManager;
-        val callUri = Uri.parse("tel:$number");
-        val bundle = Bundle();
+        val telecomManager = reactApplicationContext.getSystemService(Context.TELECOM_SERVICE) as TelecomManager
+        val callUri = "tel:$number".toUri()
+        val bundle = Bundle()
         //bundle.putInt(TelecomManager.EXTRA_)
 
-        telecomManager.placeCall(callUri, bundle);
+        telecomManager.placeCall(callUri, bundle)
     }
 
     companion object {

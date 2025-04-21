@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
@@ -148,6 +148,10 @@ export function CallButton({
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
     const buttonColor = useSharedValue(Colors[theme].middleground);
+
+    useEffect(() => {
+        buttonColor.value = Colors[theme].middleground;
+    }, [theme])
 
     return (
         <MetroActionView

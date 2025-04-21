@@ -195,7 +195,6 @@ function NavigatorComponent(): React.JSX.Element {
           }
         }
       }}/>
-      <Stack.Screen name="CallScreen" component={CallScreen}/>
     </Stack.Navigator>
   )
 }

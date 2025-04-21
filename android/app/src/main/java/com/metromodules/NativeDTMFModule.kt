@@ -26,8 +26,8 @@ class NativeDTMFModule(reactContext: ReactApplicationContext) : NativeDTMFSpec(r
     override fun getName() = NAME
 
     private fun _startToneLocal(digit: Int, duration: Int) {
-        val toneGenerator = ToneGenerator(AudioManager.STREAM_DTMF, 50);
-        toneGenerator.startTone(digit, duration);
+        val toneGenerator = ToneGenerator(AudioManager.STREAM_DTMF, 50)
+        toneGenerator.startTone(digit, duration)
     }
 
     override fun playDTMFTone(digit: Double, duration: Double) {

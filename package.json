@@ -8,7 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "reconnect": "adb reverse tcp:8081 tcp:8081",
-    "codegen": "cd android && ./gradlew generateCodegenArtifactsFromSchema"
+    "codegen": "cd android && ./gradlew generateCodegenArtifactsFromSchema",
+    "codegen-windows": "cd android && gradlew.bat generateCodegenArtifactsFromSchema"
   },
   "codegenConfig": {
     "name": "MetroModules",

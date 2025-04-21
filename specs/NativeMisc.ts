@@ -10,7 +10,10 @@ export interface Spec extends TurboModule {
     exitApp(): void,
     isDialerRoleAvailable(): boolean,
     isDialerRoleHeld(): boolean,
-    requestDialerRole(): Promise<number>
+    requestDialerRole(): Promise<number>,
+
+    startDialActivity(): void,
+    startCallActivity(): void
 }
 
 export default TurboModuleRegistry.getEnforcing<Spec>(

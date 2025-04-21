@@ -18,13 +18,11 @@
     android:label="@string/app_name"
     android:icon="@mipmap/ic_launcher"
     android:roundIcon="@mipmap/ic_launcher_round"
-    android:allowBackup="false"
     android:theme="@style/AppTheme"
     android:supportsRtl="true">
     <activity
       android:name=".MainActivity"
-      android:label="@string/app_name"
-      android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+      android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize|uiMode"
       android:launchMode="singleTask"
       android:windowSoftInputMode="adjustResize"
       android:exported="true"
@@ -32,31 +30,56 @@
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
         <category android:name="android.intent.category.LAUNCHER"/>
-        <action android:name="android.telecom.InCallService"/>
-        
       </intent-filter>
     </activity>
 
-  <service android:name="io.github.duckloveshack.metro_dialer_native.CallService"
-            android:permission="android.permission.BIND_INCALL_SERVICE"
-            android:exported="true">
-        <meta-data android:name="android.telecom.IN_CALL_SERVICE_UI" android:value="true" />
-        <meta-data android:name="android.telecom.IN_CALL_SERVICE_RINGING"
-            android:value="true" />
-        <intent-filter>
-            <action android:name="android.telecom.InCallService"/>
-        </intent-filter>
-  </service>
- 
+      <activity
+          android:name=".DialActivity"
+          android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize|uiMode"
+          android:launchMode="singleTask"
+          android:windowSoftInputMode="adjustResize"
+          android:exported="true"
+          android:theme="@style/BootTheme">
+          <intent-filter>
+              <action android:name="android.intent.action.DIALER"/>
+              <category android:name="android.intent.category.DEFAULT"/>
+          </intent-filter>
+          <intent-filter>
+              <action android:name="android.intent.action.DIAL" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <data android:scheme="tel" />
+          </intent-filter>
+      </activity>
 
-    <service
-      android:name="io.github.duckloveshack.metro_dialer_native.ConnectService"
-      android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"
-      android:exported="false">
-      <intent-filter>
-          <action android:name="android.telecom.ConnectionService"/>
-      </intent-filter>
-   </service>
+      <activity
+          android:name=".CallActivity"
+          android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|smallestScreenSize|uiMode"
+          android:launchMode="singleTask"
+          android:windowSoftInputMode="adjustResize"
+          android:exported="false"
+          android:theme="@style/BootTheme">
+      </activity>
+
+    <service android:name="io.github.duckloveshack.metro_dialer_native.CallService"
+              android:permission="android.permission.BIND_INCALL_SERVICE"
+              android:exported="true">
+          <meta-data android:name="android.telecom.IN_CALL_SERVICE_UI" android:value="true" />
+          <meta-data android:name="android.telecom.IN_CALL_SERVICE_RINGING"
+              android:value="true" />
+          <intent-filter>
+              <action android:name="android.telecom.InCallService"/>
+          </intent-filter>
+    </service>
+
+
+<!--    <service-->
+<!--      android:name="io.github.duckloveshack.metro_dialer_native.ConnectService"-->
+<!--      android:permission="android.permission.BIND_TELECOM_CONNECTION_SERVICE"-->
+<!--      android:exported="false">-->
+<!--      <intent-filter>-->
+<!--          <action android:name="android.telecom.ConnectionService"/>-->
+<!--      </intent-filter>-->
+<!--    </service>-->
 
   </application>
 

@@ -1,24 +1,16 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { View, Text, StyleSheet, StatusBar, ScrollView, NativeModules, TouchableWithoutFeedback, useWindowDimensions, StyleProp, ViewStyle, TextInput, Keyboard, KeyboardType, NativeSyntheticEvent, TextInputKeyPressEventData, Linking } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { View, Text, StatusBar, useWindowDimensions, StyleProp, ViewStyle } from "react-native";
 import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import Colors from "../components/style/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontStyles from "../components/style/fonts";
-import BottomBar from "../components/elements/BottomBar";
-import TitleSwitcher from "../components/compound/TitleSwitcher";
 import LocalizationContext, { LocalizationContextProps } from "../context/LocalizationContext";
-import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
-import { CallScreenProps, DialScreenProps, MainScreenProps } from "../types/screens";
-import MetroTouchable, { MetroActionView } from "../components/elements/MetroTouchable";
 import Animated, { AnimatedStyle, Easing, useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 import { useTranslation } from "react-i18next";
 import Icon from "@react-native-vector-icons/material-icons";
-import { formatNumber } from "../context/NumberContext";
-import Orientation, { LANDSCAPE, OrientationType, PORTRAIT, PORTRAIT_UPSIDE_DOWN, useOrientationChange } from "react-native-orientation-locker";
-import NativeCallReceiver from "../specs/NativeCallReceiver";
 import glyphMap from "../node_modules/@react-native-vector-icons/material-icons/glyphmaps/MaterialIcons.json"
 import { CallButton } from "../components/elements/Button";
-import { DialButton, DialPoundButton, DialStarButton } from "./DialScreen";
+import { DialButton, DialPoundButton, DialStarButton } from "./screenlets/DialScreenInternal";
 import NativeDTMF from "../specs/NativeDTMF";
 
 const BUTTON_GAP = 4;
@@ -100,9 +92,8 @@ function CallScreenEndButton({
 }
 
 function CallScreen({
-    route,
-    navigation
-}: CallScreenProps): React.JSX.Element {
+
+}): React.JSX.Element {
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, setLocale } = useContext<LocalizationContextProps>(LocalizationContext);
     const { t } = useTranslation(["dialpad"]);

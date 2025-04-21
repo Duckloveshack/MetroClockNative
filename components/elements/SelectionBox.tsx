@@ -27,7 +27,10 @@ function SelectionBox({
 }: Attributes): React.JSX.Element {
     const [expanded, setExpanded] = useState<boolean>(false);
     const [selected, setSelected] = useState<string>(defaultValue || options[0]?.value || "");
-    const [index, setIndex] = useState<number>(0);
+    const [index, setIndex] = useState<number>(() => {
+        const option = options.filter((option) => option.value == selected)[0];
+        return options.indexOf(option);
+    });
 
     const boxHeight = useSharedValue(NORMAL_BOX_HEIGHT);
     const yTranslation = useSharedValue(0);

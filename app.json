@@ -1,6 +1,6 @@
 {
-  "name": "metro_dialer_native",
-  "displayName": "`Metro Dialer`",
+  "name": "metro_clock_native",
+  "displayName": "`Metro Clock`",
   "platforms": [
     "android"
   ]

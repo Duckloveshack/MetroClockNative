@@ -44,6 +44,7 @@ function Button({
                 borderWidth: 3,
                 marginEnd: "auto",
                 marginVertical: 10,
+                
             }, backgroundColorStyle, style]}
             onTap={onPress}
             onTapStart={onPressIn}
@@ -54,7 +55,8 @@ function Button({
             <Text style={[{
                 color: disabled? Colors[theme].secondary: Colors[theme].primary,
                 marginHorizontal: 10,
-                marginVertical: 6
+                marginVertical: "auto",
+                textAlign: "center",             
             }, FontStyles.box]}>
                 {text}
             </Text>

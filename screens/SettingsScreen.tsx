@@ -110,7 +110,7 @@ function SettingsScreen({
                         <Button text="test" onPress={() => { navigation.navigate("Test") }}/>
 
                         <Text style={[{ color: Colors[theme].secondary }, FontStyles.info]}>
-                            Dialer Version: {appPackage.version} {"\n"}
+                            Clock Version: {appPackage.version} {"\n"}
                             Android API Level: {Platform.Version} {"\n"}
                             React Native Version: {Platform.constants.reactNativeVersion.major}.{Platform.constants.reactNativeVersion.minor}.{Platform.constants.reactNativeVersion.patch} {"\n"}
                         </Text>

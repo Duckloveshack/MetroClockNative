@@ -5,14 +5,17 @@ import Colors from "../components/style/colors";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FontStyles from "../components/style/fonts";
 import BottomBar from "../components/elements/BottomBar";
-import TitleSwitcher from "../components/compound/TitleSwitcher";
 import LocalizationContext, { LocalizationContextProps } from "../context/LocalizationContext";
 import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
 import { MainScreenProps } from "../types/screens";
 import MetroTabs from "../components/elements/MetroTabs";
 import HistoryScreen from "./screenlets/HistoryScreen";
+import SectionTitle from "../components/elements/SectionTitle";
+import { t } from "i18next";
+import ClocksScreen from "./screenlets/ClocksScreen";
+import StopwatchScreen from "./screenlets/StopwatchScreen";
 
-function MainScreen({
+function MainScreenInternal({
     route,
     navigation
 }: MainScreenProps): React.JSX.Element {
@@ -40,7 +43,7 @@ function MainScreen({
     });
 
     return(
-        <BottomBarProvider>
+        // <BottomBarProvider>
             <View style={styles.container}>
                 <View style={styles.itemContainer}>
                     <StatusBar
@@ -50,22 +53,35 @@ function MainScreen({
                     />
                     <SafeAreaView style={{flex: 1}}>
                         <View style={{margin: 15, marginBottom: 0}}>
-                            <TitleSwitcher/>
+                            <SectionTitle title={t("common:appName").toUpperCase()}/>
                         </View>
                         <MetroTabs
                             route={route}
                             navigation={navigation}
                             screens={[
-                                { title: "history", component: HistoryScreen },
-                                { title: "speed dial", component: HistoryScreen },
+                                { title: "clocks", component: ClocksScreen },
+                                { title: "alarms", component: HistoryScreen },
+                                { title: "stopwatch", component: StopwatchScreen },
+                                { title: "timer", component: HistoryScreen },
                             ]}
                         />
                     </SafeAreaView>
                 </View>
                 <BottomBar controls={controls} options={options} hidden={hidden}/>
             </View>
-        </BottomBarProvider>
+        // </BottomBarProvider>
     );
+}
+
+function MainScreen({
+    route,
+    navigation
+}: MainScreenProps): React.JSX.Element {
+    return(
+        <BottomBarProvider>
+            <MainScreenInternal route={route} navigation={navigation}/>
+        </BottomBarProvider>
+    )
 }
 
 export default MainScreen;

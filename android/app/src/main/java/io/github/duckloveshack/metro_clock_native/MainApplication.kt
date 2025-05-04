@@ -1,4 +1,4 @@
-package io.github.duckloveshack.metro_dialer_native
+package io.github.duckloveshack.metro_clock_native
 
 import android.app.Application
 import com.facebook.react.PackageList
@@ -11,10 +11,7 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
-import com.metromodules.NativeDTMFPackage
 import com.metromodules.NativeMiscPackage
-import com.metromodules.NativeCallContactPackage
-import com.metromodules.NativeCallReceiverPackage
 
 class MainApplication : Application(), ReactApplication {
 
@@ -24,10 +21,7 @@ class MainApplication : Application(), ReactApplication {
             PackageList(this).packages.apply {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
-              add(NativeDTMFPackage())
               add(NativeMiscPackage())
-              add(NativeCallContactPackage())
-              add(NativeCallReceiverPackage())
             }
 
         override fun getJSMainModuleName(): String = "index"

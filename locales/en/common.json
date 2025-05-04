@@ -1,5 +1,5 @@
 {
-    "appName": "Dialer",
+    "appName": "Clock",
     "multiSimCarrier": "Call using <0>{{carrier}}</0>",
     "noSim": "No SIM Installed",
     "ok": "ok",

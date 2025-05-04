@@ -7,10 +7,10 @@ import LocalizationContext, { LocalizationContextProps } from "../../context/Loc
 import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../../context/BottomBarContext";
 import { ScreenletAttributes } from "../../components/elements/MetroTabs";
 import RoundedButton from "../../components/elements/RoundedButton";
-import { useTranslation } from "react-i18next";
 import { runOnJS, useAnimatedReaction } from "react-native-reanimated";
+import { useTranslation } from "react-i18next";
 
-function HistoryScreen({
+function ClocksScreen({
     index,
     currentIndex,
     route,
@@ -39,15 +39,15 @@ function HistoryScreen({
         });
     }
 
-        useAnimatedReaction(
-            () => currentIndex?.value,
-            (curIndex, prevIndex) => {
-                if (curIndex == index && curIndex != prevIndex) {
-                    runOnJS(clockBar)()
-                }
-            },
-            [setBar, t]
-        )
+    useAnimatedReaction(
+        () => currentIndex?.value,
+        (curIndex, prevIndex) => {
+            if (curIndex == index && curIndex != prevIndex) {
+                runOnJS(clockBar)()
+            }
+        },
+        [setBar, t]
+    )
 
     return(
         <View style={{
@@ -57,9 +57,10 @@ function HistoryScreen({
             // padding: 15
         }}>
             <ScrollView>
+                <Text style={{ color: Colors[theme].primary }}>{"ts sucks </3"}</Text>
             </ScrollView>
         </View>
     );
 }
 
-export default HistoryScreen;
+export default ClocksScreen;

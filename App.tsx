@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react';
 import { createStackNavigator, StackCardInterpolatedStyle, StackCardInterpolationProps } from '@react-navigation/stack';
-import TestScreen from './screens/TestScreen';
 import { NavigationContainer, useNavigationContainerRef, createNavigationContainerRef } from '@react-navigation/native';
 import ThemeContext, { ThemeProvider } from './context/ThemeContext';
-import { SimProvider } from './context/SimContext';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LocalizationProvider } from './context/LocalizationContext';
@@ -15,8 +13,6 @@ import ModalScreen from './screens/ModalScreen';
 import MainScreen from './screens/MainScreen';
 import BootSplash from "react-native-bootsplash";
 import SplashScreen from './screens/_SplashScreen';
-import DialScreen from './screens/DialScreen';
-import CallScreen from './screens/CallScreen';
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
@@ -35,13 +31,11 @@ function App(): React.JSX.Element {
     <NavigationContainer ref={navigationRef}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <SimProvider>
-            <LocalizationProvider>
-              <GestureHandlerRootView>
-                <NavigatorComponent/>
-              </GestureHandlerRootView>
-            </LocalizationProvider>
-          </SimProvider>
+          <LocalizationProvider>
+            <GestureHandlerRootView>
+              <NavigatorComponent/>
+            </GestureHandlerRootView>
+          </LocalizationProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </NavigationContainer>
@@ -145,36 +139,7 @@ function NavigatorComponent(): React.JSX.Element {
       }}
     >
       <Stack.Screen name="Splash" component={SplashScreen}/>
-      <Stack.Screen name="Test" component={TestScreen}/>
       <Stack.Screen name="MainScreen" component={MainScreen}/>
-      <Stack.Screen name="DialScreen" component={DialScreen} options={{
-        cardStyleInterpolator: ({current, layouts}): StackCardInterpolatedStyle => ({
-          cardStyle: {
-            transform: [{
-              translateY: current.progress.interpolate({
-                inputRange: [0, 1],
-                outputRange: [layouts.screen.height, 0]
-              })
-            }]
-          }
-        }),
-        transitionSpec: {
-          open: {
-            animation: "timing",
-            config: {
-              duration: 500,
-              easing: Easing.out(Easing.poly(3))
-            }
-          },
-          close: {
-            animation: "timing",
-            config: {
-              duration: 500,
-              easing: Easing.out(Easing.poly(3))
-            }
-          }
-        }
-      }}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
       <Stack.Screen name="ModalScreen" component={ModalScreen} options={{
         detachPreviousScreen: false,

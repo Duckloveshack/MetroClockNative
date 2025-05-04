@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react"
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react"
 import { LayoutChangeEvent, ScrollView, TouchableWithoutFeedback, useWindowDimensions, View } from "react-native"
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext"
 import Animated, { ReanimatedLogLevel, useSharedValue, configureReanimatedLogger, interpolate, useAnimatedRef, runOnJS, interpolateColor, useAnimatedStyle, SharedValue } from "react-native-reanimated"
@@ -28,6 +28,14 @@ type Attributes = {
     route: RouteProp<RootStackParamList>,
     navigation: NavigationProp<RootStackParamList>
 }
+
+// export type TabsContextProps = {
+//     currentScreen: SharedValue<number>
+// }
+
+// const TabsContext = createContext<TabsContextProps>({
+//   currentScreen: 0
+// });
 
 // One big sloppy compromise :D
 function TitleText({
@@ -84,6 +92,7 @@ function MetroTabs({
 
     const offsetIndex = useSharedValue<number>(0);
     const currentScreen = useSharedValue<number>(0);
+    const currentRelativeIndex = useSharedValue<number>(0);
 
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
 
@@ -100,7 +109,7 @@ function MetroTabs({
             <View style={{
                 paddingEnd: "50%",
             }}>
-                <item.component index={index} currentIndex={currentScreen} navigation={navigation} route={route}/>
+                <item.component index={index} currentIndex={currentRelativeIndex} navigation={navigation} route={route}/>
             </View>
         )
     }
@@ -161,7 +170,16 @@ function MetroTabs({
 
     function onProgressChange (offsetProgress: number, absoluteProgress:number) {
         offsetIndex.value = absoluteProgress;
-        if (currentScreen.value !== Math.round(absoluteProgress)) currentScreen.value = Math.round(absoluteProgress);
+
+        const roundedProgress = Math.round(absoluteProgress)
+        if (currentScreen.value !== roundedProgress) {
+            currentScreen.value = roundedProgress;
+            if (roundedProgress > screens.length-1) {
+                currentRelativeIndex.value = 0
+            } else {
+                currentRelativeIndex.value = roundedProgress
+            }
+        }
     }
 
     const titleStyle = useAnimatedStyle(() => ({

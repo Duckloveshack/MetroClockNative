@@ -128,18 +128,24 @@ function BottomBar ({
     }
 
     useEffect(() => {
-        controlTranslateY.value = withTiming(-NORMAL_BAR_HEIGHT, {
-            duration: 150, 
-            easing: Easing.in(Easing.circle)
-        });
-        setTimeout(() => {
-            _setControls(controls);
-            controlTranslateY.value = NORMAL_BAR_HEIGHT;
-            controlTranslateY.value = withTiming(0, {
-                duration: 200,
-                easing: Easing.in(Easing.elastic(1.2))
-            })
-        }, 150);
+        if (!hidden) {
+            controlTranslateY.value = withTiming(-NORMAL_BAR_HEIGHT, {
+                duration: 150, 
+                easing: Easing.in(Easing.circle)
+            });
+            setTimeout(() => {
+                _setControls(controls);
+                controlTranslateY.value = NORMAL_BAR_HEIGHT;
+                controlTranslateY.value = withTiming(0, {
+                    duration: 300,
+                    easing: Easing.in(Easing.elastic(1.1))
+                })
+            }, 150);               
+        } else {
+            setTimeout(() => {
+                _setControls([])
+            }, 150)
+        }
     }, [controls]);
 
     useEffect(() => {
@@ -170,7 +176,8 @@ function BottomBar ({
         transform: [{
             translateY: rootTranslateY.value
         }],
-        height: rootTranslateY.value == NORMAL_BAR_HEIGHT? 0: NORMAL_BAR_HEIGHT
+        //height: rootTranslateY.value == NORMAL_BAR_HEIGHT? 0: NORMAL_BAR_HEIGHT
+        height: Math.max(60-rootTranslateY.value, 0)
     }));
 
     return (
@@ -201,6 +208,7 @@ function BottomBar ({
                 }, controlStyle]}>
                     {_controls.map((control, index) => {
                         return (
+                            //@ts-ignore
                             <RoundedButton key={index} size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
                         )
                     })}

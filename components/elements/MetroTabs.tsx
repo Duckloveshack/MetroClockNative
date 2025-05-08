@@ -64,7 +64,7 @@ function TitleText({
             color: interpolateColor(offsetInternal,
                 [relativeIndex-1, relativeIndex, relativeIndex+1],
                 [secondaryColor, primaryColor, secondaryColor]
-            )
+            ),
         }
     })
 

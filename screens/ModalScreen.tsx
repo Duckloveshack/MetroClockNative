@@ -17,7 +17,7 @@ function DefaultOKButton({
 
     return (
         <ModalButton
-            text={t("common:ok")}
+            text={t("common:button.ok")}
             onPress={() => { navigation.goBack(null) }}
         />
     )

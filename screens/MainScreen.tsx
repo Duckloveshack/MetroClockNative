@@ -14,6 +14,7 @@ import SectionTitle from "../components/elements/SectionTitle";
 import { t } from "i18next";
 import ClocksScreen from "./screenlets/ClocksScreen";
 import StopwatchScreen from "./screenlets/StopwatchScreen";
+import TestCityChoice from "./screenlets/TestCityChoice";
 
 function MainScreenInternal({
     route,
@@ -32,7 +33,7 @@ function MainScreenInternal({
         itemContainer: {
             //padding: 15,
             paddingBottom: 0,
-            flex: 1
+            flex: 1,
         },
         descriptionText: {
             color: Colors[theme].primary,
@@ -59,15 +60,15 @@ function MainScreenInternal({
                             route={route}
                             navigation={navigation}
                             screens={[
-                                { title: "clocks", component: ClocksScreen },
-                                { title: "alarms", component: HistoryScreen },
-                                { title: "stopwatch", component: StopwatchScreen },
-                                { title: "timer", component: HistoryScreen },
+                                { title: t("common:tab.clocks"), component: ClocksScreen },
+                                { title: t("common:tab.alarms"), component: HistoryScreen },
+                                { title: t("common:tab.stopwatch"), component: StopwatchScreen },
+                                { title: t("common:tab.timers"), component: HistoryScreen },
                             ]}
                         />
+                        <BottomBar controls={controls} options={options} hidden={hidden}/>
                     </SafeAreaView>
                 </View>
-                <BottomBar controls={controls} options={options} hidden={hidden}/>
             </View>
         // </BottomBarProvider>
     );

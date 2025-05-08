@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const FontStyles = StyleSheet.create({
     title: {
         fontWeight: 200,
-        fontSize: 60
+        fontSize: 60.2
     },
     sectionTitle: {
         fontSize: 16,

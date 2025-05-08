@@ -26,7 +26,8 @@ function ClocksScreen({
             controls: [
                 {
                     icon: "add",
-                    string: "add",
+                    string: t("common:button.add"),
+                    onPress: () => { navigation.navigate("CityPickScreen"); }
                 },
             ],
             options: [
@@ -48,6 +49,12 @@ function ClocksScreen({
         },
         [setBar, t]
     )
+
+    useEffect(() => {
+        if (currentIndex?.value == index) {
+            clockBar();
+        }
+    }, [locale])
 
     return(
         <View style={{

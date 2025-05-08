@@ -1,6 +1,18 @@
 {
-    "appName": "Numéroteur",
-    "multiSimCarrier": "Appelez avec <0>{{carrier}}</0>",
-    "noSim": "Aucune carte SIM installée",
-    "ok": "ok"
+    "appName": "Horloge",
+
+    "button.add": "ajouter",
+    "button.ok": "ok",
+    "button.pause": "pause",
+    "button.resume": "démarrer",
+    "button.start": "démarrer",
+    "button.stop": "annuler", 
+
+    "tab.alarms": "alarmes",
+    "tab.clocks": "horloges",
+    "tab.stopwatch": "chronomètre",
+    "tab.timers": "minuteurs",
+
+    "stopwatch.clear": "effacer",
+    "stopwatch.lap": "tour"
 }

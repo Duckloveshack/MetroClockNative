@@ -81,11 +81,11 @@ function SettingsScreen({
                     <TitleText text={t("settings:settings")}/>
                     <ScrollView>
                         <SettingsSelectionBox 
-                            title={t("settings:themeSetting")}
+                            title={t("settings:theme.settingName")}
                             options={[
-                                { name: t("settings:lightTheme"), value: "light" },
-                                { name: t("settings:darkTheme"), value: "dark" },
-                                { name: t("settings:systemTheme"), value: "system" },
+                                { name: t("settings:theme.light"), value: "light" },
+                                { name: t("settings:theme.dark"), value: "dark" },
+                                { name: t("settings:theme.system"), value: "system" },
                             ]}
                             fetchValue={() => {
                                 return themeSetting;
@@ -94,11 +94,12 @@ function SettingsScreen({
                                 setTheme(theme);
                             }}
                         />
+                        {/* TODO: make this dynamic */}
                         <SettingsSelectionBox 
-                            title={t("settings:languageSetting")}
+                            title={t("settings:language.settingName")}
                             options={[
-                                { name: t("settings:languageName", { lng: "en" }), value: "en" },
-                                { name: t("settings:languageName", { lng: "fr" }), value: "fr" }
+                                { name: t("settings:language.localName", { lng: "en" }), value: "en" },
+                                { name: t("settings:language.localName", { lng: "fr" }), value: "fr" }
                             ]}
                             fetchValue={() => {
                                 return locale;
@@ -107,12 +108,11 @@ function SettingsScreen({
                                 setLocale(locale);
                             }}
                         />
-                        <Button text="test" onPress={() => { navigation.navigate("Test") }}/>
 
                         <Text style={[{ color: Colors[theme].secondary }, FontStyles.info]}>
-                            Clock Version: {appPackage.version} {"\n"}
-                            Android API Level: {Platform.Version} {"\n"}
-                            React Native Version: {Platform.constants.reactNativeVersion.major}.{Platform.constants.reactNativeVersion.minor}.{Platform.constants.reactNativeVersion.patch} {"\n"}
+                            {t("settings:debug.appVersion", { version: appPackage.version })}{"\n"}
+                            {t("settings:debug.levelAPI", { version: Platform.Version })} {"\n"}
+                            {t("settings:debug.rnVersion", { version: `${Platform.constants.reactNativeVersion.major}.${Platform.constants.reactNativeVersion.minor}.${Platform.constants.reactNativeVersion.patch}` })} {"\n"}
                         </Text>
                     </ScrollView>
                 </SafeAreaView>

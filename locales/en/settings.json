@@ -1,11 +1,15 @@
 {
     "settings": "settings",
 
-    "languageSetting": "Language",
-    "languageName": "English",
+    "language.settingName": "Language",
+    "language.localName": "English (US)",
 
-    "themeSetting": "Theme",
-    "lightTheme": "light",
-    "darkTheme": "dark",
-    "systemTheme": "system"
+    "theme.settingName": "Theme",
+    "theme.light": "light",
+    "theme.dark": "dark",
+    "theme.system": "system",
+
+    "debug.appVersion": "Metro Clock Version: {{version}}",
+    "debug.levelAPI": "Android API Level: {{version}}",
+    "debug.rnVersion": "React Native Version: {{version}}"
 }

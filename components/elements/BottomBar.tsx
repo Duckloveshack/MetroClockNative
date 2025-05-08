@@ -1,13 +1,17 @@
-import { Text, View } from "react-native"
+import { Dimensions, StatusBar, Text, View } from "react-native"
 import { useContext, useEffect, useState } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import RoundedButton from "./RoundedButton";
-import { ScrollView, TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { ScrollView, Pressable } from "react-native-gesture-handler";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, withDelay, runOnJS } from "react-native-reanimated";
 import FontStyles from "../style/fonts";
 import _ from "lodash";
 import MetroTouchable from "./MetroTouchable";
+
+const screenHeight = Dimensions.get('screen').height;
+const windowHeight = Dimensions.get('window').height;
+const navbarHeight = screenHeight - windowHeight + (StatusBar.currentHeight ?? 0);
 
 const NORMAL_BAR_HEIGHT = 60;
 const REVEALED_BAR_HEIGHT = 80;
@@ -55,7 +59,7 @@ function Link ({
     }))
 
     return (
-        <TouchableWithoutFeedback
+        <Pressable
             onPress={onPress}
             key={index}
         >
@@ -77,7 +81,7 @@ function Link ({
                     </Text>
                 </MetroTouchable>
             </Animated.View>
-        </TouchableWithoutFeedback>
+        </Pressable>
     )
 }
 
@@ -107,8 +111,9 @@ function BottomBar ({
 }: Attributes): React.JSX.Element {
     const [expanded, setExpanded] = useState<boolean>(false);
     const [_controls, _setControls] = useState<controlProps>([]);
-    const barHeight = useSharedValue<number>(60);
-    const descOpacity = useSharedValue<number>(1);
+    const barHeight = useSharedValue<number>(NORMAL_BAR_HEIGHT);
+    const descOpacity = useSharedValue<number>(0);
+    const barOpacity = useSharedValue<number>(1);
     const controlTranslateY = useSharedValue<number>(0);
     const rootTranslateY = useSharedValue<number>(NORMAL_BAR_HEIGHT);
 
@@ -153,6 +158,15 @@ function BottomBar ({
             duration: 250,
             easing: Easing.out(Easing.circle)
         });
+        if (hidden) {
+            barOpacity.value = withDelay(100, withTiming(0, {
+                duration: 50
+            }))
+        } else {
+            barOpacity.value = withTiming(1, {
+                duration: 50
+            })
+        }
     }, [hidden])
 
     const controlStyle = useAnimatedStyle(() => ({
@@ -165,7 +179,8 @@ function BottomBar ({
     const expandStyle = useAnimatedStyle(() => ({
         transform: [{
             translateY: -barHeight.value+NORMAL_BAR_HEIGHT
-        }]
+        }],
+        opacity: barOpacity.value
     }));
 
     const opacityStyle = useAnimatedStyle(() => ({
@@ -176,104 +191,118 @@ function BottomBar ({
         transform: [{
             translateY: rootTranslateY.value
         }],
+        overflow: "visible",
         //height: rootTranslateY.value == NORMAL_BAR_HEIGHT? 0: NORMAL_BAR_HEIGHT
-        height: Math.max(60-rootTranslateY.value, 0)
+        height: Math.max(NORMAL_BAR_HEIGHT-rootTranslateY.value, 0)
     }));
 
     return (
         <Animated.View
             style={rootStyle}
         >
-        <Animated.View
-            style={[{
-                backgroundColor: Colors[theme].foreground,
-                width: "100%",
-                height: EXTENDED_BAR_HEIGHT
-            }, expandStyle]}
-        >
-            <View style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                height: 60,
-                overflow: "hidden"
-            }}>
-                <View style={{ width: "15%" }}/>
-                <Animated.View style={[{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: 60,
-                    flexDirection: "row",
-                    width: "70%",
-                    gap: 30
-                }, controlStyle]}>
-                    {_controls.map((control, index) => {
-                        return (
-                            //@ts-ignore
-                            <RoundedButton key={index} size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
-                        )
-                    })}
-                </Animated.View>
+            {expanded? (<Pressable
+                style={{
+                    backgroundColor: "#00000000",
+                    width: "100%",
+                    height: windowHeight,
+                    position: "absolute",
+                    bottom: 0,
+                    zIndex: -1,
+                }}
+                onPress={expandBar}
+            />): <></>}
+            <Animated.View
+                style={[{
+                    backgroundColor: Colors[theme].foreground,
+                    width: "100%",
+                    height: EXTENDED_BAR_HEIGHT+navbarHeight,
+                    position: "absolute",
+                    bottom: NORMAL_BAR_HEIGHT-EXTENDED_BAR_HEIGHT-navbarHeight
+                }, expandStyle]}
+            >
                 <View style={{
-                    width: "15%",
-                    alignItems: "flex-end",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    height: NORMAL_BAR_HEIGHT,
+                    overflow: "hidden"
                 }}>
-                    <TouchableWithoutFeedback
-                        onPress={() => {
-                            expandBar()
-                        }}
+                    <View style={{ width: "15%" }}/>
+                    <Animated.View style={[{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: NORMAL_BAR_HEIGHT,
+                        flexDirection: "row",
+                        width: "70%",
+                        gap: 30
+                    }, controlStyle]}>
+                        {_controls.map((control, index) => {
+                            return (
+                                //@ts-ignore
+                                <RoundedButton key={index} size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
+                            )
+                        })}
+                    </Animated.View>
+                    <View style={{
+                        width: "15%",
+                        alignItems: "flex-end",
+                    }}>
+                        <Pressable
+                            onPress={() => {
+                                expandBar()
+                            }}
+                            style={{
+                                flex: 1,
+                                paddingLeft: 15
+                            }}
+                        >
+                            <View style={{
+                                flexDirection: "row",
+                                gap: 4,
+                                marginRight: 15,
+                                marginTop: 10,
+                            }}>
+                                <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
+                                <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
+                                <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
+                            </View>
+                        </Pressable>
+                    </View>
+                </View>
+                <View style={{
+                    height: 20,
+                    flexDirection: "row",
+                    marginBottom: 15
+                }}>
+                    <View style={{ width: "15%" }}/>
+                    <View 
                         style={{
-                            flex: 1,
-                            paddingLeft: 15
+                            width: "70%",
+                            flexDirection: "row",
+                            gap: 10,
+                            justifyContent: "center"
                         }}
                     >
-                        <View style={{
-                            flexDirection: "row",
-                            gap: 4,
-                            marginRight: 15,
-                            marginTop: 10,
-                        }}>
-                            <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
-                            <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
-                            <View style={{ backgroundColor: Colors[theme].primary, height: 4, width: 4, borderRadius: 2 }}/>
-                        </View>
-                    </TouchableWithoutFeedback>
+                        {_controls.map((control, index) => {
+                            return (
+                                <Animated.Text key={index} style={[{
+                                    color: control.disabled? Colors[theme].secondary: Colors[theme].primary,
+                                    width: 60,
+                                    textAlign: "center",
+                                    marginTop: -3
+                                }, FontStyles.description, opacityStyle]}>
+                                    {control.string}
+                                </Animated.Text>
+                            )
+                        })}
+                    </View>
+                    <View style={{ width: "15%" }}/>
                 </View>
-            </View>
-            <View style={{
-                height: 20,
-                flexDirection: "row",
-                marginBottom: 15
-            }}>
-                <View style={{ width: "15%" }}/>
-                <View 
-                    style={{
-                        width: "70%",
-                        flexDirection: "row",
-                        gap: 10,
-                        justifyContent: "center"
-                    }}
-                >
-                    {_controls.map((control, index) => {
-                        return (
-                            <Animated.Text key={index} style={[{
-                                color: control.disabled? Colors[theme].secondary: Colors[theme].primary,
-                                width: 60,
-                                textAlign: "center",
-                                marginTop: -3
-                            }, FontStyles.description, opacityStyle]}>
-                                {control.string}
-                            </Animated.Text>
-                        )
-                    })}
-                </View>
-                <View style={{ width: "15%" }}/>
-            </View>
-            <ScrollView style={{ marginBottom: 10 }}>
-                {options.map((option, index) => (
-                    <Link index={index} expanded={expanded} string={option.string} disabled={option.disabled} onPress={option.onPress} key={index}/>
-                ))}
-            </ScrollView>
-        </Animated.View>
+                <ScrollView style={{ marginBottom: 10 }}>
+                    {options.map((option, index) => (
+                        <Link index={index} expanded={expanded} string={option.string} disabled={option.disabled} onPress={option.onPress} key={index}/>
+                    ))}
+                </ScrollView>
+            </Animated.View>
         </Animated.View>
     )
 }

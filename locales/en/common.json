@@ -1,11 +1,18 @@
 {
     "appName": "Clock",
-    "multiSimCarrier": "Call using <0>{{carrier}}</0>",
-    "noSim": "No SIM Installed",
-    "ok": "ok",
 
-    "incomingType": "Incoming",
-    "outgoingType": "Outgoing",
-    "missedType": "Missed",
-    "unknownType": "Unknown"
+    "button.add": "add",
+    "button.ok": "ok",
+    "button.pause": "pause",
+    "button.resume": "resume",
+    "button.start": "start",
+    "button.stop": "stop",
+
+    "tab.alarms": "alarms",
+    "tab.clocks": "world clocks",
+    "tab.stopwatch": "stopwatch",
+    "tab.timers": "timers",
+
+    "stopwatch.clear": "clear",
+    "stopwatch.lap": "lap"
 }

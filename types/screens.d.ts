@@ -3,6 +3,7 @@ import type { StackScreenProps } from "@react-navigation/stack";
 export type RootStackParamList = {
     Splash: undefined,
     MainScreen: undefined,
+    CityPickScreen: undefined,
     SettingsScreen: undefined,
     ModalScreen: {
         title: string,
@@ -19,6 +20,11 @@ export type SplashScreenProps = StackScreenProps<
 export type MainScreenProps = StackScreenProps<
     RootStackParamList,
     "MainScreen"
+>
+
+export type CityPickScreenProps = StackScreenProps<
+    RootStackParamList,
+    "CityPickScreen"
 >
 
 export type SettingsScreenProps = StackScreenProps<

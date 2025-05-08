@@ -13,6 +13,7 @@ import ModalScreen from './screens/ModalScreen';
 import MainScreen from './screens/MainScreen';
 import BootSplash from "react-native-bootsplash";
 import SplashScreen from './screens/_SplashScreen';
+import CityPickScreen from './screens/CityPickScreen';
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
@@ -140,6 +141,25 @@ function NavigatorComponent(): React.JSX.Element {
     >
       <Stack.Screen name="Splash" component={SplashScreen}/>
       <Stack.Screen name="MainScreen" component={MainScreen}/>
+      <Stack.Screen name="CityPickScreen" component={CityPickScreen} options={{
+        detachPreviousScreen: false,
+        presentation: "transparentModal",
+        cardStyleInterpolator: (): StackCardInterpolatedStyle => ({}),
+        transitionSpec: {
+          open: {
+            animation: "timing",
+            config: {
+              duration: 0,
+            }
+          },
+          close: {
+            animation: "timing",
+            config: {
+              duration: 200,
+            }
+          }
+        }
+      }}/>
       <Stack.Screen name="SettingsScreen" component={SettingsScreen}/>
       <Stack.Screen name="ModalScreen" component={ModalScreen} options={{
         detachPreviousScreen: false,

@@ -31,7 +31,7 @@ function StopwatchScreen({
 
     const actualTime = useRef<number>(0);
 
-    const intervalRef = useRef<number>();
+    const intervalRef = useRef<number>(null);
 
     function stopwatchBar() {
         setBar({
@@ -99,6 +99,7 @@ function StopwatchScreen({
 
     function clearTimer() {
         setEllapsedTime(0);
+        actualTime.current = 0;
         setRunning(false);
         setLaps([]);
 
@@ -178,6 +179,7 @@ function StopwatchScreen({
             <View style={{
                 marginTop: "auto",
                 paddingHorizontal: 10,
+                marginBottom: 10,
                 height: 70,
                 flexDirection: "row"
             }}>
@@ -189,7 +191,7 @@ function StopwatchScreen({
                         flex: 1
                     }, mainRotationStyle]}>
                         <Button
-                            text="lap"
+                            text={t("common:stopwatch.lap")}
                             style={{
                                 flex: 1,
                                 height: 60
@@ -199,7 +201,7 @@ function StopwatchScreen({
                         />
                         {!running? <>
                             <Button
-                                text="start"
+                                text={t("common:button.start")}
                                 style={{
                                     flex: 1,
                                     height: 60
@@ -208,7 +210,7 @@ function StopwatchScreen({
                             />
                         </>: <>
                             <Button
-                                text="pause"
+                                text={t("common:button.pause")}
                                 style={{
                                     flex: 1,
                                     height: 60
@@ -224,7 +226,7 @@ function StopwatchScreen({
                         flex: 1
                     }, secondaryRotationStyle]}>
                         <Button
-                            text="clear"
+                            text={t("common:stopwatch.clear")}
                             style={{
                                 flex: 1,
                                 height: 60
@@ -232,7 +234,7 @@ function StopwatchScreen({
                             onPress={clearTimer}
                         />
                         <Button
-                            text="resume"
+                            text={t("common:button.resume")}
                             style={{
                                 flex: 1,
                                 height: 60

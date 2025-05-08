@@ -1,0 +1,37 @@
+{
+  "migIndex": 2,
+  "data": [
+    {
+      "path": "assets/bootsplash/logo.png",
+      "sha1": "095d55869c6c67cb5ffc687117cc328609565b0e"
+    },
+    {
+      "path": "assets/bootsplash/logo@1,5x.png",
+      "sha1": "d7d4fb545463c54d26aaf38f5eb15397e45c6f90"
+    },
+    {
+      "path": "assets/bootsplash/logo@2x.png",
+      "sha1": "9b865888f09ffcf327a7b2f5073d82c6726c6dc1"
+    },
+    {
+      "path": "assets/bootsplash/logo@3x.png",
+      "sha1": "473c4e6791bffc83db8eddec271d7961b0537d38"
+    },
+    {
+      "path": "assets/bootsplash/logo@4x.png",
+      "sha1": "e6c6e51dcece37fbccc79dd961d19d33c671a9b4"
+    },
+    {
+      "path": "assets/bootsplash/manifest.json",
+      "sha1": "df9aa8b416fd5374017b4dc33af03a0d2ba5f3d9"
+    },
+    {
+      "path": "assets/bootsplash-logo.svg",
+      "sha1": "624e334052f8d657556868eaf2faa14508a82d11"
+    },
+    {
+      "path": "assets/city-timezones.db",
+      "sha1": "dc73c5ff280295d4d2af25b7f1a11940fdbb7e39"
+    }
+  ]
+}

@@ -1,11 +1,15 @@
 {
     "settings": "paramètres",
 
-    "languageSetting": "Langue",
-    "languageName": "Français",
+    "language.settingName": "Langue",
+    "language.localName": "Français",
 
-    "themeSetting": "Thème",
-    "lightTheme": "clair",
-    "darkTheme": "sombre",
-    "systemTheme": "système"
+    "theme.settingName": "Thème",
+    "theme.light": "clair",
+    "theme.dark": "sombre",
+    "theme.system": "système",
+
+    "debug.appVersion": "Version de l'Horloge Métro: {{version}}",
+    "debug.levelAPI": "Niveau d'API Android: {{version}}",
+    "debug.rnVersion": "Version de React Native: {{version}}"
 }

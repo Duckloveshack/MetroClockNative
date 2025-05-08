@@ -50,7 +50,7 @@ function MetroTouchable({
         centerX: 0,
         centerY: 0
     });
-    const pressInTimeout = useRef<NodeJS.Timeout>();
+    const pressInTimeout = useRef<NodeJS.Timeout>(null);
 
     const windowHeight = useWindowDimensions().height;
     const windowWidth = useWindowDimensions().width;
@@ -124,7 +124,7 @@ function MetroTouchable({
 
         if (typeof onPressOut == "function") onPressOut();
 
-        clearTimeout(pressInTimeout.current)
+        clearTimeout(pressInTimeout.current!)
     }
 
     const rotateStyle = useAnimatedStyle(() => ({
@@ -229,7 +229,7 @@ export function MetroActionView({
     });
     const viewRef = useAnimatedRef<Animated.View>();
 
-    const tapStartTimeout = useRef<NodeJS.Timeout>();
+    const tapStartTimeout = useRef<NodeJS.Timeout>(null);
 
     //I don't want to look at Math.min(Math.max(function stuff))
     function absLimitDegree(value: number) {
@@ -310,7 +310,7 @@ export function MetroActionView({
             tapStartTimeout.current = setTimeout(() => { onTapStart(e) }, delayTapStart);
         })
         .onEnd((e) => {
-            clearTimeout(tapStartTimeout.current);
+            clearTimeout(tapStartTimeout.current!);
             setTimeout(() => { onTapEnd(e) }, delayTapEnd);
         });
 

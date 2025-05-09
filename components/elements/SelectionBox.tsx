@@ -21,7 +21,7 @@ type Attributes = {
 
 function SelectionBox({
     options = [],
-    onChange = (value:string) => {},
+    onChange = () => {},
     defaultValue,
     disabled=false
 }: Attributes): React.JSX.Element {

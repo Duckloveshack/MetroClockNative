@@ -9,6 +9,11 @@
     "theme.dark": "sombre",
     "theme.system": "système",
 
+    "24h.settingName": "Utilizer le Format 24 Heures",
+
+    "switch.off": "Off",
+    "switch.on": "On",
+
     "debug.appVersion": "Version de l'Horloge Métro: {{version}}",
     "debug.levelAPI": "Niveau d'API Android: {{version}}",
     "debug.rnVersion": "Version de React Native: {{version}}"

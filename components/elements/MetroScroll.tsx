@@ -1,8 +1,8 @@
 import MaskedView from "@react-native-masked-view/masked-view";
-import { useEffect, useState, useRef, useLayoutEffect } from "react";
-import {NativeScrollEvent, ScrollView, View, Dimensions, useWindowDimensions, StyleProp, ViewStyle } from "react-native"
+import { useEffect, useRef, useState } from "react";
+import { StyleProp, useWindowDimensions, View, ViewStyle } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
-import Animated, { useAnimatedStyle, useSharedValue, withDecay, withClamp, clamp, ReduceMotion, useAnimatedRef, measure, runOnUI, runOnJS } from "react-native-reanimated";
+import Animated, { clamp, ReduceMotion, useAnimatedStyle, useSharedValue, withClamp, withDecay } from "react-native-reanimated";
 
 type Attributes = {
     children?: Array<React.ReactElement<any, any>> | React.ReactElement<any, any>,

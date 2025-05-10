@@ -1,20 +1,17 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
-import { View, Text, ScrollView, FlatList, TextInput, Dimensions } from "react-native";
-import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
+import { DB, moveAssetsDatabase, open } from "@op-engineering/op-sqlite";
+import React, { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Dimensions, FlatList, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { transliterate } from "transliteration";
+import { MetroActionView } from "../components/elements/MetroTouchable";
+import TextBox from "../components/elements/TextBox";
 import Colors from "../components/style/colors";
 import FontStyles from "../components/style/fonts";
-import LocalizationContext, { LocalizationContextProps } from "../context/LocalizationContext";
-import BottomBarContext, { BottomBarContextProps, BottomBarProvider } from "../context/BottomBarContext";
-import { ScreenletAttributes } from "../components/elements/MetroTabs";
-import { useTranslation } from "react-i18next";
-import Animated, { Easing, runOnJS, useAnimatedReaction, useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
-import { DB, moveAssetsDatabase, open, PreparedStatement, Scalar } from "@op-engineering/op-sqlite";
-import { transliterate } from "transliteration";
-import TextBox from "../components/elements/TextBox";
+import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import { CityPickScreenProps } from "../types/screens";
-import { useFocusEffect } from "@react-navigation/native";
-import { MetroActionView } from "../components/elements/MetroTouchable";
-import { SafeAreaView } from "react-native-safe-area-context";
+import TileTransitionView from "../components/transitions/TileTransitionView";
+import ClocksContext, { ClocksContextProps } from "../context/ClocksContext";
 
 const windowHeight = Dimensions.get('window').height;
 
@@ -43,71 +40,37 @@ async function openCityDB() {
 
 openCityDB();
 
-type CityItemProps = {
-    item: City,
-    index: number,
-    animIndex: number
-}
-
-function CityItem({ item, index, animIndex }: CityItemProps): React.JSX.Element {
-    const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
-
-    const elementRotation = useSharedValue<number>(0);
-
-    if (animIndex != -1) {
-        useFocusEffect(
-            useCallback(() => {
-                if (animIndex != -1) {
-                    elementRotation.value = 90;
-                    elementRotation.value = withDelay(index*10, withTiming(0, {
-                        duration: 50,
-                        easing: Easing.out(Easing.circle)
-                    }))
-                }
-    
-                return () => {
-                    elementRotation.value = withDelay(index*10, withTiming(-90, {
-                        duration: 50,
-                        easing: Easing.out(Easing.circle)
-                    }))
-                }
-            }, [])
-        );
-    }
-
-    const rotationStyle = useAnimatedStyle(() => ({ transform: [{ rotateX: `${elementRotation.value}deg` }] }));
-
-    return (
-        <MetroActionView
-            key={index}
-            style={[{
-                backgroundColor: Colors[theme].foreground,
-                height: 60
-            }, rotationStyle]}
-        >
-            <Text numberOfLines={1} style={[{ color: Colors[theme].primary}, FontStyles.link]}>{item.name}</Text>
-        </MetroActionView>
-    )
-}
-
 function CityPickScreen({
-    navigation,
-    route
+    navigation
 }: CityPickScreenProps): React.JSX.Element {
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
+    const { addClock } = useContext<ClocksContextProps>(ClocksContext);
     const { t } = useTranslation(["common", "settings"]);
     const [cityList, setCityList] = useState<Array<any>>(cities);
 
-    // useFocusEffect(() => {
-    //     useCallback(() => {
-
-    //     }, [])
-    // });
-
-    const animationScreenNumber = Math.ceil(windowHeight/20);
-
     //@ts-ignore
-    function renderItem({item, index}) { return <CityItem index={index} item={item} animIndex={Math.max(animationScreenNumber-index, -1)}/>}
+    function renderItem({item, index}: {item: City, index: number}) {
+        function onTap() {
+            addClock({
+                name: item.name,
+                timezone: item.timezone
+            });
+            if (navigation.canGoBack()) navigation.goBack();
+        }
+
+        return (
+            <MetroActionView
+                key={index}
+                style={{
+                    backgroundColor: Colors[theme].foreground,
+                    height: 60
+                }}
+                onTap={onTap}
+            >
+                <Text numberOfLines={1} style={[{ color: Colors[theme].primary}, FontStyles.link]}>{item.name}</Text>
+            </MetroActionView>
+        )
+    }
 
     async function onChangeText(text: string) {
         if (text == "") {
@@ -123,18 +86,21 @@ function CityPickScreen({
 
     return(
         <SafeAreaView style={{
-            backgroundColor: Colors[theme].background,
+            //backgroundColor: Colors[theme].background,
+            backgroundColor: Colors[theme].foreground,
             height: "100%",
             width: "100%",
             // padding: 15
         }}>
-            <TextBox
-                onChangeText={onChangeText}
-            />
-            <FlatList
-                data={cityList}
-                renderItem={renderItem}
-            />
+            <View style={{ backgroundColor: Colors[theme].foreground }}>
+                <TextBox
+                    onChangeText={onChangeText}
+                />
+                <FlatList
+                    data={cityList}
+                    renderItem={renderItem}
+                />
+            </View>
         </SafeAreaView>
     );
 }

@@ -10,6 +10,7 @@
     "theme.system": "system",
 
     "24h.settingName": "Use 24-hour Format",
+    "shortCityName.settingName": "Prefer Short City Names",
 
     "switch.off": "Off",
     "switch.on": "On",

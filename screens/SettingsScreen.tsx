@@ -103,7 +103,7 @@ function SettingsScreen({
 }: SettingsScreenProps): React.JSX.Element {
     const { theme, isDark, setTheme, themeSetting } = useContext<ThemeContextProps>(ThemeContext);
     const { t } = useTranslation(["common", "settings"]);
-    const { locale, setLocale, is24H, setIs24H } = useContext(LocalizationContext);
+    const { locale, setLocale, is24H, setIs24H, shortCityNames, setShortCityNames } = useContext(LocalizationContext);
 
     const styles = StyleSheet.create({
         container: {
@@ -163,6 +163,12 @@ function SettingsScreen({
                             title={t("settings:24h.settingName")}
                             defaultState={is24H}
                             onChange={setIs24H}
+                        />
+
+                        <SettingsSwitch
+                            title={t("settings:shortCityName.settingName")}
+                            defaultState={shortCityNames}
+                            onChange={setShortCityNames}
                         />
 
                         <Text style={[{ color: Colors[theme].secondary }, FontStyles.info]}>

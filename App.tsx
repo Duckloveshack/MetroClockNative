@@ -14,6 +14,7 @@ import MainScreen from './screens/MainScreen';
 import BootSplash from "react-native-bootsplash";
 import SplashScreen from './screens/_SplashScreen';
 import CityPickScreen from './screens/CityPickScreen';
+import { ClocksProvider } from './context/ClocksContext';
 
 export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
@@ -33,9 +34,11 @@ function App(): React.JSX.Element {
       <SafeAreaProvider>
         <ThemeProvider>
           <LocalizationProvider>
-            <GestureHandlerRootView>
-              <NavigatorComponent/>
-            </GestureHandlerRootView>
+            <ClocksProvider>
+              <GestureHandlerRootView>
+                <NavigatorComponent/>
+              </GestureHandlerRootView>
+            </ClocksProvider>
           </LocalizationProvider>
         </ThemeProvider>
       </SafeAreaProvider>
@@ -155,7 +158,7 @@ function NavigatorComponent(): React.JSX.Element {
           close: {
             animation: "timing",
             config: {
-              duration: 200,
+              duration: 500,
             }
           }
         }

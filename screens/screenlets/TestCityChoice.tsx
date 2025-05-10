@@ -12,6 +12,7 @@ import { runOnJS, useAnimatedReaction } from "react-native-reanimated";
 import { DB, moveAssetsDatabase, open, PreparedStatement, Scalar } from "@op-engineering/op-sqlite";
 import { transliterate } from "transliteration";
 import TextBox from "../../components/elements/TextBox";
+import TileTransitionView from "../../components/transitions/TileTransitionView";
 
 let cities: Record<string, Scalar>[]
 let statement: PreparedStatement
@@ -104,7 +105,7 @@ function TestCityChoice({
     }
 
     return(
-        <View style={{
+        <TileTransitionView style={{
             backgroundColor: Colors[theme].background,
             height: "100%",
             width: "100%",
@@ -117,7 +118,7 @@ function TestCityChoice({
                 data={cityList}
                 renderItem={renderItem}
             />
-        </View>
+        </TileTransitionView>
     );
 }
 

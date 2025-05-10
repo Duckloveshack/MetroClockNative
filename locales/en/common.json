@@ -8,6 +8,8 @@
     "button.start": "start",
     "button.stop": "stop",
 
+    "clocks.dateOffsetFormat": "{{date}}, {{offset}}",
+
     "tab.alarms": "alarms",
     "tab.clocks": "world clocks",
     "tab.stopwatch": "stopwatch",

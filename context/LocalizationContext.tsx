@@ -7,14 +7,18 @@ export type LocalizationContextProps = {
   setLocale: (lang: string) => void,
   locale: string,
   setIs24H: (state: boolean) => void,
-  is24H: boolean
+  is24H: boolean,
+  setShortCityNames: (state: boolean) => void,
+  shortCityNames: boolean
 }
 
 const LocalizationContext = createContext<(LocalizationContextProps)>({
-  setLocale: (lang: string) => {},
+  setLocale: () => {},
   locale: "en",
-  setIs24H: (state: boolean) => {},
-  is24H: false
+  setIs24H: () => {},
+  is24H: false,
+  setShortCityNames: () => {}, 
+  shortCityNames: true
 });
 
 type Props = {
@@ -26,6 +30,7 @@ export const LocalizationProvider = ({
 }: Props) => {
   const [locale, _setLocale] = useState<string>("en");
   const [is24H, _setIs24H] = useState<boolean>(false);
+  const [shortCityNames, _setShortCityNames] = useState<boolean>(false);
 
   function setLocale(lang: string): void {
     _setLocale(lang);
@@ -36,6 +41,11 @@ export const LocalizationProvider = ({
   function setIs24H(state: boolean): void {
     _setIs24H(state);
     AsyncStorage.setItem('24h', state.toString());
+  }
+
+  function setShortCityNames(state: boolean): void {
+    _setShortCityNames(state);
+    AsyncStorage.setItem('shortnames', state.toString());
   }
 
   useEffect(() => {
@@ -56,9 +66,18 @@ export const LocalizationProvider = ({
         console.log(err)
       }
     }
+    const getShortCityNames = async () => {
+      try {
+        const savedShort = await AsyncStorage.getItem('shortnames');
+        _setShortCityNames(savedShort == "true" || false);
+      } catch (err) {
+        console.log(err)
+      }
+    }
 
     getLocale();
     getIs24H();
+    getShortCityNames();
   }, [])
   
   return (
@@ -66,7 +85,9 @@ export const LocalizationProvider = ({
       setLocale: setLocale,
       locale: locale,
       setIs24H: setIs24H,
-      is24H: is24H
+      is24H: is24H,
+      setShortCityNames: setShortCityNames,
+      shortCityNames: shortCityNames
     }}>
       {children}
     </LocalizationContext.Provider>

@@ -92,7 +92,7 @@ function CityPickScreen({
             width: "100%",
             // padding: 15
         }}>
-            <View style={{ backgroundColor: Colors[theme].foreground }}>
+            <TileTransitionView style={{ backgroundColor: Colors[theme].foreground }}>
                 <TextBox
                     onChangeText={onChangeText}
                 />
@@ -100,7 +100,7 @@ function CityPickScreen({
                     data={cityList}
                     renderItem={renderItem}
                 />
-            </View>
+            </TileTransitionView>
         </SafeAreaView>
     );
 }

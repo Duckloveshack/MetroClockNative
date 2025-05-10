@@ -67,7 +67,7 @@ function CityItem({
                     timeZone: entry.timezone,
                     hour: "numeric",
                     minute: "2-digit"
-                })}
+                }).toLowerCase()}
             </Text>
             <Text numberOfLines={1} style={[{
                 color: Colors.accentColor,

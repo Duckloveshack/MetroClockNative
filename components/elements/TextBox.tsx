@@ -2,27 +2,50 @@ import { useContext, useEffect, useState } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
-import Animated, { AnimatedStyle, useAnimatedStyle, useSharedValue} from "react-native-reanimated";
-import MetroTouchable, { MetroActionView } from "./MetroTouchable";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import Animated, { AnimatedStyle, Easing, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
+import { StyleProp, ViewStyle, TextInput, DimensionValue } from "react-native";
 
 type Attributes = {
     onChangeText?: (text: string) => void,
     style?: StyleProp<ViewStyle>,
-    disabled?: boolean
+    disabled?: boolean,
+    shiftDown?: boolean
 }
 
 function TextBox({
     onChangeText = (text: string) => {},
     style,
-    disabled = false
+    disabled = false,
+    shiftDown = false
 }: Attributes): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     const [onFocus, setOnFocus] = useState<boolean>(false);
 
+    //not really how it works in wp8 but i just wanted to test something out
+    const topMargin = useSharedValue<DimensionValue>('0%');
+
+    useEffect(() => {
+        if (shiftDown) {
+            if (onFocus) {
+                topMargin.value = withTiming("100%", {
+                    duration: 200,
+                    easing: Easing.out(Easing.circle)
+                });
+            } else {
+                topMargin.value = withTiming("0%", {
+                    duration: 200,
+                    easing: Easing.out(Easing.circle)
+                });
+            }
+        }
+    }, [onFocus]);
+
+    const viewStyle = useAnimatedStyle(() => ({
+        marginTop: topMargin.value
+    }))
+
     return(
-        <View style={{ flexDirection: "row" }}>
+        <Animated.View style={[{ flexDirection: "row" }, viewStyle]}>
             <TextInput
                 style={[{
                     backgroundColor: disabled? Colors[theme].secondary: Colors[theme].primary,
@@ -34,14 +57,14 @@ function TextBox({
                     paddingVertical: 6,
                     flex: 1
                 }, FontStyles.box, style]}
-                enabled={!disabled}
+                editable={!disabled}
                 onChangeText={onChangeText}
                 cursorColor={Colors.accentColor}
                 selectionColor={Colors.accentColor}
                 onFocus={() => { setOnFocus(true); }}
                 onBlur={() => { setOnFocus(false); }}
             />
-        </View>
+        </Animated.View>
     )
 }
 

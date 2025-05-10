@@ -27,8 +27,6 @@ export const ClocksProvider = ({
 }: Props) => {
   const [clocks, setClocks] = useState<WorldClock[]>([]);
 
-  console.log(clocks)
-
   function addClock(clock: WorldClock) {
     setClocks((clocks) => {
         AsyncStorage.setItem('worldclocks', JSON.stringify(clocks.concat([clock])));

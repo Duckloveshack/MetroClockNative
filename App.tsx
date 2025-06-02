@@ -145,20 +145,29 @@ function NavigatorComponent(): React.JSX.Element {
       <Stack.Screen name="Splash" component={SplashScreen}/>
       <Stack.Screen name="MainScreen" component={MainScreen}/>
       <Stack.Screen name="CityPickScreen" component={CityPickScreen} options={{
-        detachPreviousScreen: false,
-        presentation: "transparentModal",
-        cardStyleInterpolator: (): StackCardInterpolatedStyle => ({}),
+        cardStyleInterpolator: ({current, layouts}): StackCardInterpolatedStyle => ({
+          cardStyle: {
+            transform: [{
+              translateY: current.progress.interpolate({
+                inputRange: [0, 1],
+                outputRange: [layouts.screen.height, 0]
+              })
+            }]
+          }
+        }),
         transitionSpec: {
           open: {
             animation: "timing",
             config: {
-              duration: 0,
+              duration: 500,
+              easing: Easing.out(Easing.poly(3))
             }
           },
           close: {
             animation: "timing",
             config: {
               duration: 500,
+              easing: Easing.out(Easing.poly(3))
             }
           }
         }

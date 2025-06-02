@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
-import Animated, { AnimatedStyle, Easing, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming} from "react-native-reanimated";
 import { StyleProp, ViewStyle, TextInput, DimensionValue } from "react-native";
 
 type Attributes = {
@@ -13,7 +13,7 @@ type Attributes = {
 }
 
 function TextBox({
-    onChangeText = (text: string) => {},
+    onChangeText = () => {},
     style,
     disabled = false,
     shiftDown = false

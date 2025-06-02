@@ -4,7 +4,7 @@ import Colors from "../style/colors";
 import FontStyles from "../style/fonts";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import MetroTouchable from "./MetroTouchable";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import { Pressable, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const NORMAL_BOX_HEIGHT = 45;
 
@@ -44,7 +44,7 @@ function SelectionBox({
         backgroundColor: expanded? Colors[theme].primary: Colors[theme].background,
         borderColor: disabled? Colors[theme].secondary: expanded? Colors.accentColor: Colors[theme].primary,
         gap: 4,
-        overflow: "hidden"
+        overflow: "hidden",
     }));
 
     useEffect(() => {
@@ -82,7 +82,7 @@ function SelectionBox({
         >
             <Animated.View style={boxStyle}>
                 {options.map((option, index) => ((
-                    <TouchableWithoutFeedback
+                    <Pressable
                         onPress={() => {
                             if (!disabled && (!option.disabled || !expanded)) {
                                 setExpanded(!expanded)
@@ -107,7 +107,7 @@ function SelectionBox({
                                 {option.name}
                             </Animated.Text>
                         </MetroTouchable>
-                    </TouchableWithoutFeedback>
+                    </Pressable>
                 )))}
             </Animated.View>
         </MetroTouchable>

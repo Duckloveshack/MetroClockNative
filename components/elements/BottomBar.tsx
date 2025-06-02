@@ -1,5 +1,5 @@
 import { Dimensions, StatusBar, Text, View } from "react-native"
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
 import Colors from "../style/colors";
 import RoundedButton from "./RoundedButton";
@@ -8,6 +8,8 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, withDel
 import FontStyles from "../style/fonts";
 import _ from "lodash";
 import MetroTouchable from "./MetroTouchable";
+import glyphMap from "../../node_modules/@react-native-vector-icons/material-icons/glyphmaps/MaterialIcons.json"
+import { useFocusEffect } from "@react-navigation/native";
 
 const screenHeight = Dimensions.get('screen').height;
 const windowHeight = Dimensions.get('window').height;
@@ -192,9 +194,14 @@ function BottomBar ({
             translateY: rootTranslateY.value
         }],
         overflow: "visible",
-        //height: rootTranslateY.value == NORMAL_BAR_HEIGHT? 0: NORMAL_BAR_HEIGHT
         height: Math.max(NORMAL_BAR_HEIGHT-rootTranslateY.value, 0)
     }));
+
+    useFocusEffect(useCallback(() => {
+        return () => {
+            if (expanded) expandBar()
+        }
+    }, []))
 
     return (
         <Animated.View
@@ -237,8 +244,7 @@ function BottomBar ({
                     }, controlStyle]}>
                         {_controls.map((control, index) => {
                             return (
-                                //@ts-ignore
-                                <RoundedButton key={index} size={40} icon={control.icon} disabled={control.disabled} onPress={control.onPress}/>
+                                <RoundedButton key={index} size={40} icon={control.icon as keyof typeof glyphMap} disabled={control.disabled} onPress={control.onPress}/>
                             )
                         })}
                     </Animated.View>

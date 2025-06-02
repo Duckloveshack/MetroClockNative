@@ -16,5 +16,7 @@
     "tab.timers": "timers",
 
     "stopwatch.clear": "clear",
-    "stopwatch.lap": "lap"
+    "stopwatch.lap": "lap",
+
+    "misc.na": "N/A"
 }

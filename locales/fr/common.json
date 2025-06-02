@@ -16,5 +16,7 @@
     "tab.timers": "minuteurs",
 
     "stopwatch.clear": "effacer",
-    "stopwatch.lap": "tour"
+    "stopwatch.lap": "tour",
+
+    "misc.na": "N//A"
 }

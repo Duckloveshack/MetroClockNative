@@ -2,17 +2,20 @@ import React, {createContext, useState, useEffect} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useColorScheme } from 'react-native';
 
+type SavedTheme = "light" | "dark" | "system";
+type FunctionalTheme = "light" | "dark"
+
 export type ThemeContextProps = {
-  theme: "light" | "dark",
-  themeSetting: "light" | "dark" | "system",
-  setTheme: ( newTheme: "light" | "dark" | "system") => void,
+  theme: FunctionalTheme,
+  themeSetting: SavedTheme,
+  setTheme: ( newTheme: SavedTheme) => void,
   isDark: boolean
 }
 
 const ThemeContext = createContext<ThemeContextProps>({
   theme: "dark",
   themeSetting: "system",
-  setTheme: ( newTheme: "light" | "dark" | "system" ): void => {},
+  setTheme: (): void => {},
   isDark: true
 });
 
@@ -23,15 +26,15 @@ type Props = {
 export const ThemeProvider = ({
     children
 }: Props) => {
-  const [theme, setTheme] = useState<"light" | "dark">('dark');
-  const [themeSetting, setThemeSetting] = useState<"light" | "dark" | "system" | string>("system");
+  const [theme, setTheme] = useState<FunctionalTheme>('dark');
+  const [themeSetting, setThemeSetting] = useState<"light" | "dark" | "system">("system");
 
-  const systemTheme: "light" | "dark" = useColorScheme() || "dark";
+  const systemTheme: FunctionalTheme = useColorScheme() || "dark";
 
   useEffect(() => {
     const getTheme = async () => {
       try {
-        const savedTheme = await AsyncStorage.getItem('theme');
+        const savedTheme = await AsyncStorage.getItem('theme') as SavedTheme;
         setTheme(savedTheme && ( savedTheme === "dark" || savedTheme === "light")? savedTheme: systemTheme);
         setThemeSetting(savedTheme || "system");
       } catch (error) {
@@ -41,14 +44,13 @@ export const ThemeProvider = ({
     getTheme();
   }, [systemTheme]);
 
-  function setThemeExternal( newTheme: "light" | "dark" | "system" ): void {
+  function setThemeExternal( newTheme: SavedTheme ): void {
     AsyncStorage.setItem("theme", newTheme);
     setTheme(newTheme !== "system"? newTheme: systemTheme || "dark");
     setThemeSetting(newTheme);
   }
 
   return (
-    //@ts-ignore
     <ThemeContext.Provider value={{theme: theme, themeSetting: themeSetting, setTheme: setThemeExternal, isDark: theme === "dark"}}>
       {children}
     </ThemeContext.Provider>

@@ -10,6 +10,8 @@ import BottomBarContext, { BottomBarContextProps } from "../../context/BottomBar
 import ClocksContext, { ClocksContextProps, WorldClock } from "../../context/ClocksContext";
 import LocalizationContext, { LocalizationContextProps } from "../../context/LocalizationContext";
 import ThemeContext, { ThemeContextProps } from "../../context/ThemeContext";
+import Button from "../../components/elements/Button";
+import MetroHoldView from "../../components/elements/MetroHoldView";
 
 type CityItemAttributes = {
     entry: WorldClock,
@@ -24,7 +26,7 @@ function CityItem({
 }: CityItemAttributes): React.JSX.Element {
     const { theme } = useContext<ThemeContextProps>(ThemeContext);
     const { locale, is24H, shortCityNames } = useContext<LocalizationContextProps>(LocalizationContext);
-    const { t } = useTranslation(["common"]);
+    const { t } = useTranslation(["common", "clocks"]);
     const { clocks } = useContext<ClocksContextProps>(ClocksContext);
 
     const timeOffset = useMemo(() => {
@@ -41,8 +43,30 @@ function CityItem({
 
         const offsetMinutes = Math.round((timezoneUTC.getTime() - localUTC.getTime()) / (60*1000));
 
-        return `${offsetMinutes < 0? '-': '+'}${Math.floor(Math.abs(offsetMinutes) / 60).toString().padStart(2, "0")}:${(Math.abs(offsetMinutes)%60).toString().padStart(2, '0')}`;
+        return `${offsetMinutes < 0? '-': offsetMinutes > 0? '+': '±'}${Math.floor(Math.abs(offsetMinutes) / 60).toString().padStart(2, "0")}:${(Math.abs(offsetMinutes)%60).toString().padStart(2, '0')}`;
     }, []);
+
+    function getRelativeDay() {
+        const timezoneDate = date.toLocaleString("en-ca", {
+            timeZone: entry.timezone,
+            hour12: false,
+        }).replace(', ', 'T').concat(`.${date.getMilliseconds().toString().padStart(3, '0')}Z`);
+        const timezoneUTC = new Date(timezoneDate);
+
+        const localDate = date.toLocaleString("en-ca", {
+            hour12: false,
+        }).replace(', ', 'T').concat(`.${date.getMilliseconds().toString().padStart(3, '0')}Z`);
+        const localUTC = new Date(localDate);
+
+        const dayDifference = Math.floor(timezoneUTC.getTime() / (1000*60*60*24) ) - Math.floor(localUTC.getTime() / (1000*60*60*24) )
+
+        return dayDifference == -2? "clocks:info.yesterday2x":
+            dayDifference == -1? "clocks:info.yesterday":
+            dayDifference == 0? "clocks:info.today":
+            dayDifference == 1? "clocks:info.tomorrow":
+            dayDifference == 2? "clocks:info.tomorrow2x":
+            "common:misc.na"
+    }
 
     const cityName = useMemo(() => {
         if (!shortCityNames) {
@@ -58,7 +82,7 @@ function CityItem({
     }, [clocks, shortCityNames])
 
     return (
-        <View style={{ marginHorizontal: 20 }}>
+        <MetroHoldView style={{ marginHorizontal: 20 }} key={index}>
             <Text style={[{
                 color: Colors[theme].primary
             }, FontStyles.dialButton]}>
@@ -79,11 +103,11 @@ function CityItem({
                 color: Colors[theme].secondary
             }, FontStyles.info]}>
                 {t("common:clocks.dateOffsetFormat", {
-                    date: date.toLocaleString(locale, { dateStyle: "full", timeZone: entry.timezone }).toLowerCase(),
+                    date: t(getRelativeDay()),
                     offset: timeOffset
                 })}
             </Text>
-        </View>
+        </MetroHoldView>
     )
 }
 
@@ -163,6 +187,14 @@ function ClocksScreen({
                 data={clocks}
                 renderItem={renderItem}
             />
+            <Button
+                    text="Clear cities"
+                    onPress={() => {
+                        for (let i in clocks) {
+                            removeClock(0);
+                        }
+                    }}
+                />
         </View>
     );
 }

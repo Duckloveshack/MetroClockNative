@@ -4,9 +4,11 @@ import { initReactI18next } from 'react-i18next';
 
 import common from "./locales/en/common.json";
 import settings from "./locales/en/settings.json";
+import clocks from "./locales/en/clocks.json";
 
 import fr_common from "./locales/fr/common.json";
 import fr_settings from "./locales/fr/settings.json";
+import fr_clocks from "./locales/fr/clocks.json";
 
 i18n
   .use(initReactI18next)
@@ -17,10 +19,12 @@ i18n
       en: {
         common: common,
         settings: settings,
+        clocks: clocks
       },
       fr: {
         common: fr_common,
-        settings: fr_settings
+        settings: fr_settings,
+        clocks: fr_clocks
       }
     },
     partialBundledLanguages: true,
@@ -32,8 +36,12 @@ i18n
     fallbackLng: "en",
     ns: [
       'common',
-      'settings'
-    ]
+      'settings',
+      'clocks'
+    ],
+    interpolation: {
+      escapeValue: false
+    }
   });
 
 

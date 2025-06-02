@@ -1,19 +1,18 @@
 import { DB, moveAssetsDatabase, open } from "@op-engineering/op-sqlite";
 import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Dimensions, FlatList, Text, View } from "react-native";
+import { Dimensions, FlatList, StatusBar, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { transliterate } from "transliteration";
-import { MetroActionView } from "../components/elements/MetroTouchable";
+import MetroTouchable, { MetroActionView } from "../components/elements/MetroTouchable";
 import TextBox from "../components/elements/TextBox";
 import Colors from "../components/style/colors";
 import FontStyles from "../components/style/fonts";
 import ThemeContext, { ThemeContextProps } from "../context/ThemeContext";
 import { CityPickScreenProps } from "../types/screens";
-import TileTransitionView from "../components/transitions/TileTransitionView";
 import ClocksContext, { ClocksContextProps } from "../context/ClocksContext";
-
-const windowHeight = Dimensions.get('window').height;
+import SectionTitle from "../components/elements/SectionTitle";
+import { Pressable } from "react-native-gesture-handler";
 
 type City = {
     geonameid: number,
@@ -45,10 +44,9 @@ function CityPickScreen({
 }: CityPickScreenProps): React.JSX.Element {
     const { theme, isDark } = useContext<ThemeContextProps>(ThemeContext);
     const { addClock } = useContext<ClocksContextProps>(ClocksContext);
-    const { t } = useTranslation(["common", "settings"]);
-    const [cityList, setCityList] = useState<Array<any>>(cities);
+    const { t } = useTranslation(["common", "clocks"]);
+    const [cityList, setCityList] = useState<Array<any>>([]);
 
-    //@ts-ignore
     function renderItem({item, index}: {item: City, index: number}) {
         function onTap() {
             addClock({
@@ -59,22 +57,39 @@ function CityPickScreen({
         }
 
         return (
-            <MetroActionView
-                key={index}
+            <Pressable
                 style={{
-                    backgroundColor: Colors[theme].foreground,
-                    height: 60
+                    height: 45,
+                    backgroundColor: Colors[theme].primary,
+                    marginTop: -1 //trying to fix a rendering issue
                 }}
-                onTap={onTap}
+                onPress={onTap}
+                key={index}
             >
-                <Text numberOfLines={1} style={[{ color: Colors[theme].primary}, FontStyles.link]}>{item.name}</Text>
-            </MetroActionView>
+                <MetroActionView
+                    style={{
+                        marginEnd: "auto",
+                        paddingHorizontal: 5,
+                        paddingVertical: 7,
+                        paddingTop: 8
+                    }}
+                    onTap={onTap}
+                >
+                    <Text numberOfLines={1} style={[{
+                        color: Colors[theme].background,
+                        verticalAlign: "middle"
+                    }, FontStyles.box]}
+                    >
+                        {item.name}
+                    </Text>
+                </MetroActionView>
+            </Pressable>
         )
     }
 
     async function onChangeText(text: string) {
         if (text == "") {
-            setCityList(cities)
+            setCityList([])
         } else { 
             const statement = cityDB.prepareStatement("SELECT * FROM cities WHERE UPPER(ascii_name) LIKE ? ORDER BY population DESC");
             await statement?.bind([`${transliterate(text.toUpperCase())}%`]);
@@ -85,23 +100,37 @@ function CityPickScreen({
     }
 
     return(
-        <SafeAreaView style={{
-            //backgroundColor: Colors[theme].background,
-            backgroundColor: Colors[theme].foreground,
-            height: "100%",
-            width: "100%",
-            // padding: 15
+        <View style={{
+            backgroundColor: Colors[theme].background,
         }}>
-            <TileTransitionView style={{ backgroundColor: Colors[theme].foreground }}>
-                <TextBox
-                    onChangeText={onChangeText}
-                />
-                <FlatList
-                    data={cityList}
-                    renderItem={renderItem}
-                />
-            </TileTransitionView>
-        </SafeAreaView>
+            <StatusBar
+                barStyle={isDark? "light-content": "dark-content"}
+                backgroundColor={"#ffffff00"}
+                translucent={true}
+            />
+            <SafeAreaView style={{
+                height: "100%",
+                width: "100%",
+            }}>
+                <View style={{
+                    width: "100%",
+                    height: "100%",
+                    padding: 10
+                }}>
+                    <View style={{margin: 5, marginBottom: 0}}>
+                        {/* i like genuinely have no idea why vscode is acting up about the 'never' return value */}
+                        <SectionTitle title={(t("clocks:title.pickCity") as string).toUpperCase()}/>
+                    </View>
+                    <TextBox
+                        onChangeText={onChangeText}
+                    />
+                    <FlatList
+                        data={cityList}
+                        renderItem={renderItem}
+                    />
+                </View>
+            </SafeAreaView>          
+        </View>
     );
 }
 
